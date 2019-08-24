@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { HttpModule } from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 import { APP_BASE_HREF } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -49,6 +49,7 @@ import { AdminLayoutComponent } from './layouts/admin/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth/auth-layout.component';
 
 import { AppRoutes } from './app.routing';
+import {DataApiService} from './services/data-api.service';
 
 @NgModule({
   exports: [
@@ -95,7 +96,7 @@ export class MaterialModule {}
         RouterModule.forRoot(AppRoutes,{
           useHash: true
         }),
-        HttpModule,
+        HttpClientModule,
         MaterialModule,
         MatNativeDateModule,
         SidebarModule,
@@ -108,6 +109,7 @@ export class MaterialModule {}
         AdminLayoutComponent,
         AuthLayoutComponent
     ],
+    providers: [DataApiService],
     bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
