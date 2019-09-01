@@ -19,7 +19,7 @@
                                           <th>Descripción</th>
                                       </tr>
                                   </thead>
-                                <tbody>
+                                <tbody *ngIf="categorias">
                                 <tr *ngFor="let row of categorias.lista">
                                     <td>{{row.idCategoria}}</td>
                                     <td>{{row.descripcion}}</td>
