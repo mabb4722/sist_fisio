@@ -50,6 +50,7 @@ import { AuthLayoutComponent } from './layouts/auth/auth-layout.component';
 
 import { AppRoutes } from './app.routing';
 import {DataApiService} from './services/data-api.service';
+// import { ReservasComponent } from './reservas/reservas.component';
 
 @NgModule({
   exports: [
@@ -84,7 +85,8 @@ import {DataApiService} from './services/data-api.service';
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule
-  ]
+  ],
+  /* declarations: [ReservasComponent] */
 })
 export class MaterialModule {}
 

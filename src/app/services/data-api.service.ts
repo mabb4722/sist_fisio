@@ -13,4 +13,14 @@ export class DataApiService {
      const url_api = '/stock-pwfe/categoria';
     return this.http.get(url_api);
   }
+  getAllReservasHoy() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    var fechaCadena = yyyy + mm + dd;
+    const url_api = '/stock-pwfe/reserva';
+    return this.http.get(url_api);
+ }
 }
