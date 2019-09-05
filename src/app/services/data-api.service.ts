@@ -17,4 +17,8 @@ export class DataApiService {
     const url_api_post_categoria = '/stock-pwfe/categoria';
     return this.http.post<any>(url_api_post_categoria, {'descripcion': categoria});
   }
+  deleteCategoria (iDcategoria: any): Observable<any> {
+    const url_api_delete_categoria = '/stock-pwfe/categoria/' + iDcategoria;
+    return this.http.delete<any>(url_api_delete_categoria);
+  }
 }

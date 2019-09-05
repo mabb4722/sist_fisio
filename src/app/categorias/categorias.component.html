@@ -1,5 +1,11 @@
 <div class="main-content">
     <div class="container-fluid">
+        <div class="alert alert-danger" role="alert" id="eliminado_exitoso" style="display: none">
+            Categoría eliminada con éxito!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -19,19 +25,28 @@
                                 <tr>
                                     <th>{{ dataTable.headerRow[0] }}</th>
                                     <th>{{ dataTable.headerRow[1] }}</th>
+                                    <th class="text-right">Acciones</th>
                                 </tr>
                                 </thead>
                                 <tfoot *ngIf="categorias">
                                 <tr>
                                     <th>{{ dataTable.footerRow[0] }}</th>
                                     <th>{{ dataTable.footerRow[1] }}</th>
+                                    <th class="text-right">Acciones</th>
                                 </tr>
                                 </tfoot>
                                 <tbody *ngIf="categorias">
                                 <tr *ngFor="let row of dataTable.dataRows">
                                     <td>{{row[0]}}</td>
                                     <td>{{row[1]}}</td>
-
+                                    <td class="td-actions text-right">
+                                        <button mat-raised-button type="button" class="btn btn-success " id="{{row[0]}}">
+                                            <i class="material-icons">edit</i>
+                                        </button>
+                                        <button mat-raised-button type="button" class="btn btn-danger" (click)="openModal(row[0],row[1])" >
+                                            <i class="material-icons">close</i>
+                                        </button>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -44,5 +59,24 @@
             <!-- end col-md-12 -->
         </div>
         <!-- end row -->
+        <div class="modal" tabindex="-1" role="dialog" style="display: none" id="modal_eliminar_categoria">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Eliminar  Categoría</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Está seguro que desea eliminar la categoría  <span id="descripcion_cat"></span>? </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" (click)="eliminarCategoria()">Aceptar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

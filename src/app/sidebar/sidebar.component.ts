@@ -26,7 +26,7 @@ export const ROUTES: RouteInfo[] = [{
     title: 'Categorias',
     type: 'link',
     icontype: 'event_note'
-},{
+}, {
     path: '/agregar_categoria',
     title: 'Agregar Categoría',
     type: 'link',

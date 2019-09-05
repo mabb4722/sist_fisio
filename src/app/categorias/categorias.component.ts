@@ -2,6 +2,7 @@
 
 import {Component, OnInit, AfterViewInit,   AfterViewChecked} from '@angular/core';
 import {DataApiService} from '../services/data-api.service';
+import {Router} from '@angular/router';
 
 
 declare interface DataTable {
@@ -20,10 +21,10 @@ declare const $: any;
 
 export class CategoriasComponent implements OnInit, AfterViewInit, AfterViewChecked {
     public dataTable: DataTable;
-    constructor(private dataApi: DataApiService) { }
+    constructor(private dataApi: DataApiService, private _router: Router) { }
     categorias: any;
     bandera: boolean;
-
+    eliminarID: any;
     ngOnInit() {
         this.getListCategorias();
         this.bandera = false;
@@ -75,6 +76,22 @@ export class CategoriasComponent implements OnInit, AfterViewInit, AfterViewChec
 
         }
     }
+    openModal(id, descripcion) {
+        console.log('clcik');
+        $('#descripcion_cat').html(descripcion);
+        this.eliminarID = id;
+        $('#modal_eliminar_categoria').modal('show');
+    }
+    eliminarCategoria(){
+        $('#modal_eliminar_categoria').modal('hide');
+        this.dataApi.deleteCategoria(this.eliminarID).subscribe(data  => {
+            location.reload();
+            $('#eliminado_exitoso').show();
+            this._router.navigate(['categorias']);
+            console.log('DELETE Request is successful ', data);
+
+        });
+    }
 
     getListCategorias() {
         this.dataApi.getAllCategorias().subscribe(categorias => {
@@ -92,6 +109,7 @@ export class CategoriasComponent implements OnInit, AfterViewInit, AfterViewChec
             };
         } );
     }
+
 }
 
 
