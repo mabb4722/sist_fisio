@@ -22,16 +22,6 @@ export interface ChildrenItems {
 
 // Menu Items
 export const ROUTES: RouteInfo[] = [{
-    path: '/categorias',
-    title: 'Categorias',
-    type: 'link',
-    icontype: 'event_note'
-}, {
-    path: '/agregar_categoria',
-    title: 'Agregar Categoría',
-    type: 'link',
-    icontype: 'event_note'
-}, {
         path: '/dashboard',
         title: 'Dashboard',
         type: 'link',
@@ -115,6 +105,17 @@ export const ROUTES: RouteInfo[] = [{
             {path: 'register', title: 'Register Page', ab: 'RP'},
             {path: 'lock', title: 'Lock Screen Page', ab: 'LSP'},
             {path: 'user', title: 'User Page', ab: 'UP'}
+        ]
+    },
+    {
+        path: '/categorias',
+        title: 'Categorias',
+        type: 'sub',
+        icontype: 'content_paste',
+        collapse: 'categorias',
+        children: [
+            {path: 'categorias_list', title: 'Categorías', ab: 'CAT'},
+            {path: 'agregar_categoria', title: 'Agregar Categoría', ab: 'AC'},
         ]
     }
 ];

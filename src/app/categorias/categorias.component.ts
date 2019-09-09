@@ -25,6 +25,7 @@ export class CategoriasComponent implements OnInit, AfterViewInit, AfterViewChec
     categorias: any;
     bandera: boolean;
     eliminarID: any;
+    editarID: any;
     ngOnInit() {
         this.getListCategorias();
         this.bandera = false;
@@ -36,37 +37,37 @@ export class CategoriasComponent implements OnInit, AfterViewInit, AfterViewChec
 
     }
     ngAfterViewChecked()  {
-        if (this.categorias && !this.bandera ){
+        if (this.categorias && !this.bandera ) {
             this.bandera = true;
             $('#datatables').DataTable({
-                "pagingType": "full_numbers",
-                "lengthMenu": [
+                'pagingType': 'full_numbers',
+                'lengthMenu': [
                     [10, 25, 50, -1],
-                    [10, 25, 50, "All"]
+                    [10, 25, 50, 'All']
                 ],
                 responsive: true,
                 language: {
-                    "sProcessing":     "Procesando...",
-                    "sLengthMenu":     "Mostrar _MENU_ registros",
-                    "sZeroRecords":    "No se encontraron resultados",
-                    "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                    "sInfoPostFix":    "",
-                    "sSearch":         "Buscar:",
-                    "sUrl":            "",
-                    "sInfoThousands":  ",",
-                    "sLoadingRecords": "Cargando...",
-                    "oPaginate": {
-                        "sFirst":    "Primero",
-                        "sLast":     "Último",
-                        "sNext":     "Siguiente",
-                        "sPrevious": "Anterior"
+                    'sProcessing':     'Procesando...',
+                    'sLengthMenu':     'Mostrar _MENU_ registros',
+                    'sZeroRecords':    'No se encontraron resultados',
+                    'sEmptyTable':     'Ningún dato disponible en esta tabla',
+                    'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
+                    'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
+                    'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
+                    'sInfoPostFix':    '',
+                    'sSearch':         'Buscar:',
+                    'sUrl':            '',
+                    'sInfoThousands':  ',',
+                    'sLoadingRecords': 'Cargando...',
+                    'oPaginate': {
+                        'sFirst':    'Primero',
+                        'sLast':     'Último',
+                        'sNext':     'Siguiente',
+                        'sPrevious': 'Anterior'
                     },
-                    "oAria": {
-                        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    'oAria': {
+                        'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
+                        'sSortDescending': ': Activar para ordenar la columna de manera descendente'
                     }
                 }
 
@@ -77,22 +78,40 @@ export class CategoriasComponent implements OnInit, AfterViewInit, AfterViewChec
         }
     }
     openModal(id, descripcion) {
-        console.log('clcik');
         $('#descripcion_cat').html(descripcion);
         this.eliminarID = id;
         $('#modal_eliminar_categoria').modal('show');
     }
-    eliminarCategoria(){
+    eliminarCategoria() {
         $('#modal_eliminar_categoria').modal('hide');
         this.dataApi.deleteCategoria(this.eliminarID).subscribe(data  => {
-            location.reload();
+            this.categorias.lista = this.categorias.lista.filter(item => item.idCategoria !== this.eliminarID);
             $('#eliminado_exitoso').show();
+            const table = $('#datatables').DataTable();
+            const tr = $('#categoria_tr' + this.eliminarID).closest('tr');
+            table.row(tr).remove().draw();
             this._router.navigate(['categorias']);
-            console.log('DELETE Request is successful ', data);
+
 
         });
     }
-
+    openModalEditar(id, descripcion) {
+        console.log(descripcion);
+        $('#descripcion_categoria').val(descripcion);
+        this.editarID = id;
+        $('#modal_editar_categoria').modal('show');
+    }
+    editarCategoria() {
+        $('#modal_editar_categoria').modal('hide');
+        const descripcion = $('#descripcion_categoria').val();
+        this.dataApi.editCategoria(this.editarID, descripcion).subscribe(data  => {
+            $('#editado_exitoso').show();
+            console.log(data);
+            const table = $('#datatables').DataTable();
+            $('#categoria_descripcion' + this.editarID).val(descripcion);
+            this._router.navigate(['categorias']);
+        });
+    }
     getListCategorias() {
         this.dataApi.getAllCategorias().subscribe(categorias => {
             this.categorias = categorias;

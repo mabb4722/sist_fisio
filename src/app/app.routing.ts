@@ -45,10 +45,7 @@ export const AppRoutes: Routes = [
     }, {
           path: 'categorias',
           loadChildren: './categorias/categorias.module#CategoriasModule'
-          }, {
-              path: 'agregar_categoria',
-              loadChildren: './categorias/agregarcategoria/agregarcategoria.module#AgregarcategoriaModule'
-          }
+      }
   ]}, {
       path: '',
       component: AuthLayoutComponent,
