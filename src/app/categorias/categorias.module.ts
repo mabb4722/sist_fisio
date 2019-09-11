@@ -8,7 +8,7 @@ import { MaterialModule } from '../app.module';
 import {CategoriasRoutes} from './categorias.routing';
 import {CategoriasComponent} from './categorias.component';
 import {AgregarcategoriaComponent} from './agregarcategoria/agregarcategoria.component';
-import {SubcategoriasComponent} from './subcategorias/subcategorias.component';
+
 
 
 @NgModule({
@@ -21,7 +21,6 @@ import {SubcategoriasComponent} from './subcategorias/subcategorias.component';
     declarations: [
         CategoriasComponent,
         AgregarcategoriaComponent,
-        SubcategoriasComponent
     ],
     exports: [ CategoriasComponent ]
 })

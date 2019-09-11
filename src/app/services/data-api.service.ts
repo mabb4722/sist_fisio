@@ -8,8 +8,8 @@ import {Observable} from 'rxjs';
 export class DataApiService {
   categorias: Observable<any>;
   constructor(private http: HttpClient) { }
-  getAllCategorias() {
-    const url_api_get_categoria = '/stock-pwfe/categoria';
+  getAllCategorias(filtros:any) {
+    const url_api_get_categoria = '/stock-pwfe/categoria?orderBy='+filtros.orderBy+'&orderDir='+filtros.orderDir+'&inicio='+filtros.inicio+'&cantidad='+filtros.cantidad;
     return this.http.get(url_api_get_categoria);
   }
   addCategoria (categoria: any): Observable<any> {
@@ -20,9 +20,15 @@ export class DataApiService {
     const url_api_delete_categoria = '/stock-pwfe/categoria/' + iDcategoria;
     return this.http.delete<any>(url_api_delete_categoria);
   }
-  editCategoria(idCategoria: any, descripcion: any): Observable<any> {
+  editCategoria(categoria: any, nueva_descripcion: any): Observable<any> {
     const url_api_edit_categoria = '/stock-pwfe/categoria';
-    return this.http.put<any>(url_api_edit_categoria, {'idCategoria': idCategoria , 'descripcion': descripcion});
+    return this.http.put<any>(url_api_edit_categoria, {'idCategoria': categoria.idCategoria , 'descripcion': nueva_descripcion,
+    'flagVisible': categoria.flagVisible, 'posicion': categoria.posicion
+    });
+  }
+  getOneCategoria(idCategoria) {
+    const url_api_get_categoria = '/stock-pwfe/categoria/'+idCategoria;
+    return this.http.get(url_api_get_categoria);
   }
   getSubcategorias(idCategoria: any): Observable<any> {
     console.log(idCategoria, JSON.stringify(idCategoria));

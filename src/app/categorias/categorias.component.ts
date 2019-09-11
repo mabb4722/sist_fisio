@@ -1,15 +1,16 @@
-// IMPORTANT: this is a plugin which requires jQuery for initialisation and data manipulation
 
-import {Component, OnInit, AfterViewInit,   AfterViewChecked} from '@angular/core';
+
+import {Component, OnInit} from '@angular/core';
 import {DataApiService} from '../services/data-api.service';
 import {Router} from '@angular/router';
+import { PageEvent } from '@angular/material';
+import {Sort} from '@angular/material/sort';
 
-
-declare interface DataTable {
-    headerRow: string[];
-    footerRow: string[];
-    dataRows: string[][];
-}
+// declare interface DataTable {
+//     headerRow: string[];
+//     footerRow: string[];
+//     dataRows: string[][];
+// }
 
 declare const $: any;
 
@@ -19,63 +20,47 @@ declare const $: any;
     styleUrls: ['./categorias.component.css']
 })
 
-export class CategoriasComponent implements OnInit, AfterViewInit, AfterViewChecked {
-    public dataTable: DataTable;
-    constructor(private dataApi: DataApiService, private _router: Router) { }
+export class CategoriasComponent implements OnInit{
+    footerRow: string[];
+    headerRow: string[];
+    dataRows: string[][];
     categorias: any;
     bandera: boolean;
     eliminarID: any;
     editarID: any;
+    categoriaEditar: any;
+    private count = 0;
+    sortedData: any;
+    
+
+    pageEvent: PageEvent;
+    constructor(private dataApi: DataApiService, private _router: Router) { }
+
+    
+    private filtros = {
+        orderBy: 'idCategoria',
+        orderDir: 'asc',
+        inicio: 0,
+        cantidad: 10,
+    };
     ngOnInit() {
+        this.headerRow= [ 'ID', 'Descripción' ];
+        this.footerRow= [ 'ID', 'Descripción' ];
         this.getListCategorias();
         this.bandera = false;
 
 
     }
 
-    ngAfterViewInit() {
-
-    }
-    ngAfterViewChecked()  {
-        if (this.categorias && !this.bandera ) {
-            this.bandera = true;
-            $('#datatables').DataTable({
-                'pagingType': 'full_numbers',
-                'lengthMenu': [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, 'All']
-                ],
-                responsive: true,
-                language: {
-                    'sProcessing':     'Procesando...',
-                    'sLengthMenu':     'Mostrar _MENU_ registros',
-                    'sZeroRecords':    'No se encontraron resultados',
-                    'sEmptyTable':     'Ningún dato disponible en esta tabla',
-                    'sInfo':           'Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros',
-                    'sInfoEmpty':      'Mostrando registros del 0 al 0 de un total de 0 registros',
-                    'sInfoFiltered':   '(filtrado de un total de _MAX_ registros)',
-                    'sInfoPostFix':    '',
-                    'sSearch':         'Buscar:',
-                    'sUrl':            '',
-                    'sInfoThousands':  ',',
-                    'sLoadingRecords': 'Cargando...',
-                    'oPaginate': {
-                        'sFirst':    'Primero',
-                        'sLast':     'Último',
-                        'sNext':     'Siguiente',
-                        'sPrevious': 'Anterior'
-                    },
-                    'oAria': {
-                        'sSortAscending':  ': Activar para ordenar la columna de manera ascendente',
-                        'sSortDescending': ': Activar para ordenar la columna de manera descendente'
-                    }
-                }
-
-            });
-
-            $('.card .material-datatables label').addClass('form-group');
-
-        }
+    sortData(sort: Sort) {
+        this.filtros.orderBy=sort.active;
+        this.filtros.orderDir =sort.direction;
+        this.getListCategorias();        
+     }
+     paginacion(event){
+        this.filtros.cantidad = event.pageSize
+        this.filtros.inicio = event.pageSize * event.pageIndex
+        this.getListCategorias();  
     }
     openModal(id, descripcion) {
         $('#descripcion_cat').html(descripcion);
@@ -87,10 +72,8 @@ export class CategoriasComponent implements OnInit, AfterViewInit, AfterViewChec
         this.dataApi.deleteCategoria(this.eliminarID).subscribe(data  => {
             this.categorias.lista = this.categorias.lista.filter(item => item.idCategoria !== this.eliminarID);
             $('#eliminado_exitoso').show();
-            const table = $('#datatables').DataTable();
-            const tr = $('#categoria_tr' + this.eliminarID).closest('tr');
-            table.row(tr).remove().draw();
-            this._router.navigate(['categorias']);
+            this.getListCategorias();
+            this._router.navigate(['categorias/categorias_list']);
 
 
         });
@@ -104,28 +87,34 @@ export class CategoriasComponent implements OnInit, AfterViewInit, AfterViewChec
     editarCategoria() {
         $('#modal_editar_categoria').modal('hide');
         const descripcion = $('#descripcion_categoria').val();
-        this.dataApi.editCategoria(this.editarID, descripcion).subscribe(data  => {
-            $('#editado_exitoso').show();
-            console.log(data);
-            const table = $('#datatables').DataTable();
-            $('#categoria_descripcion' + this.editarID).val(descripcion);
-            this._router.navigate(['categorias']);
+        console.log('nueva descripcion',descripcion);
+        this.dataApi.getOneCategoria(this.editarID).subscribe(data => {
+            console.log('get');
+                console.log(data);
+            this.categoriaEditar = data
+            if (this.categoriaEditar != null) {
+                this.dataApi.editCategoria(this.categoriaEditar, descripcion).subscribe(data  => {
+                    $('#editado_exitoso').show();
+                    console.log('esta parte');
+                    console.log(data);
+                    $('#categoria_descripcion' + this.editarID).html(descripcion);
+                    this.getListCategorias();
+                    this._router.navigate(['categorias/categorias_list']);
+                });
+            }
         });
+       
+        
     }
     getListCategorias() {
-        this.dataApi.getAllCategorias().subscribe(categorias => {
+        this.dataApi.getAllCategorias(this.filtros).subscribe(categorias => {
             this.categorias = categorias;
+        
             const array = [];
             for (let i = 0; i < this.categorias.lista.length; i++ ) {
                 array.push([this.categorias.lista[i].idCategoria, this.categorias.lista[i].descripcion ]) ;
-
             }
-            this.dataTable = {
-                headerRow: [ 'ID', 'Descrición' ],
-                footerRow: [ 'ID', 'Descrición' ],
-
-                dataRows: array
-            };
+            this.dataRows= array
         } );
     }
 

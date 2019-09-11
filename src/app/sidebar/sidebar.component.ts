@@ -26,7 +26,7 @@ export const ROUTES: RouteInfo[] = [{
         title: 'Dashboard',
         type: 'link',
         icontype: 'dashboard'
-    }, {
+     },{
         path: '/components',
         title: 'Components',
         type: 'sub',
@@ -115,7 +115,6 @@ export const ROUTES: RouteInfo[] = [{
         collapse: 'categorias',
         children: [
             {path: 'categorias_list', title: 'Categorías', ab: 'CAT'},
-            {path: 'agregar_categoria', title: 'Agregar Categoría', ab: 'AC'},
         ]
     }
 ];
