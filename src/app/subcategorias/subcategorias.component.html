@@ -1,0 +1,175 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <!-- <div class="alert alert-danger" role="alert" id="eliminado_exitoso" style="display: none">
+          Categoría eliminada con éxito!
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="alert alert-success" role="alert" id="editado_exitoso" style="display: none">
+          Categoría editada con éxito!
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div> -->
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-primary card-header-icon">
+                      <div class="card-icon">
+                          <i class="material-icons">assignment</i>
+                      </div>
+                      <h4 class="card-title">Sub Categorías</h4>
+                  </div>
+                  <div class="card-body">
+                      <div class="toolbar">
+                          <a data-toggle="modal" data-target="#modal_agregar_sub_categoria" mat-raised-button class="btn btn-primary">Agregar Sub Categoría</a>
+                      </div>
+                      <div class="material-datatables">
+                          <table id="datatables" class="table table-striped table-no-bordered table-hover"  matSort (matSortChange)="sortData($event)" cellspacing="0" width="100%" style="width:100%">
+                              <thead >
+                              <tr>
+                                  <th mat-sort-header="idTipoProducto">{{ headerRow[0] }}</th>
+                                  <th mat-sort-header="descripcion">{{ headerRow[1] }}</th>
+                                  <th mat-sort-header="idCategoria">{{ headerRow[2] }}</th>
+                                  <th class="text-right">Acciones</th>
+                              </tr>
+                              </thead>
+                              <tfoot >
+                              <tr>
+                                  <th>{{ footerRow[0] }}</th>
+                                  <th>{{ footerRow[1] }}</th>
+                                  <th>{{ footerRow[2] }}</th>
+                                  <th class="text-right ">Acciones</th>
+                              </tr>
+                              </tfoot>
+                              <tbody >
+                              <tr *ngFor="let row of dataRows">
+                                  <td id="{{'subcategoria_tr'+row[0]}}">{{row[0]}}</td>
+                                  <td id="{{'subcategoria_descripcion'+row[0]}}">{{row[1]}}</td>
+                                  <td id="{{'subcategoria_idCategoria'+row[0]}}">{{row[2]}}</td>
+                                  <td class="td-actions text-right disabled-sorting">
+                                       <button mat-raised-button type="button" class="btn btn-success " (click)="edit(row[0],row[1],row[2])">
+                                          <i class="material-icons">edit</i>
+                                      </button> 
+                                      <button mat-raised-button type="button" class="btn btn-danger" (click)="delete(row[0])" >
+                                          <i class="material-icons">close</i>
+                                      </button>
+                                  </td>
+                              </tr>
+                              </tbody>
+                          </table>
+                          <mat-paginator [length]="100"
+                                  [pageSize]="10"
+                                  [pageSizeOptions]="[5, 10, 25, 100]" (page)="paginacion($event)">
+                          </mat-paginator>
+
+                      </div>
+                  </div>
+                  <!-- end content-->
+              </div>
+              <!--  end card  -->
+          </div>
+          <!-- end col-md-12 -->
+      </div>
+      <!-- end row -->
+      <div class="modal" tabindex="-1" role="dialog" style="display: none" id="modal_agregar_sub_categoria">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title">Agregar  Sub Categoría</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <div class="row">
+                          <div class="col-md-12">
+                            <mat-form-field class="example-full-width">
+                                <!-- <label>Descripción</label> -->
+                                <input matInput placeholder="Descripción" type="text" id="descripcion_sub_categoria"  required >                         
+                            </mat-form-field>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12" style="margin-bottom: 2%">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Categoría</mat-label>
+                                    <mat-select  [(ngModel)]="selectedValue" required>
+                                        <mat-option>Seleccione una categoría</mat-option>
+                                        <mat-option *ngFor="let categoria of categoriasSelect" [value]="categoria.idCategoria">
+                                                {{ categoria.descripcion}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <input type="hidden" value="{{selectedValue}}" id="idCategoria">
+                                    <span id="selectControlerror" style="display: none;color:red">Seleccione una categoría!</span>
+                                    <!-- <mat-hint>{{selectControl.value?.sound}}</mat-hint> -->
+                                </mat-form-field>
+                        </div>
+                       
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span id="selectControlerror" style="display: none;color:red">Complete los campos Descripción y Categoría!</span>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" (click)="addSubCategoria()" >Aceptar</button>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!--end modal -->
+      <div class="modal" tabindex="-1" role="dialog" style="display: none" id="modal_editar_sub_categoria">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title">Editar Sub Categoría</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                              <mat-form-field class="example-full-width">
+                                  <!-- <label>Descripción</label> -->
+                                  <input matInput placeholder="Descripción" type="text" id="descripcion_sub_categoria_edit" value="{{form_edit.descripcion}}" required >                         
+                              </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12" style="margin-bottom: 2%">
+                                  <mat-form-field class="example-full-width">
+                                      <mat-label>Categoría</mat-label>
+                                      <mat-select  [(ngModel)]="selectedValueEdit" required>
+                                          <mat-option>Seleccione una categoría</mat-option>
+                                          <mat-option *ngFor="let categoria of categoriasSelect" [value]="categoria.idCategoria">
+                                                  {{ categoria.descripcion}}
+                                          </mat-option>
+                                      </mat-select>
+                                      <input type="hidden" value="{{selectedValueEdit}}" id="idCategoriaEdit">
+                                      <span id="selectControlerrorEdit" style="display: none;color:red">Seleccione una categoría!</span>
+                                      <!-- <mat-hint>{{selectControl.value?.sound}}</mat-hint> -->
+                                  </mat-form-field>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                            <span id="selectControlerror" style="display: none;color:red">Complete los campos Descripción y Categoría!</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" (click)="putSubCategoria()" >Aceptar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+              </div>
+          </div>
+      </div>
+      <!--end modal -->
+  </div>
+</div>

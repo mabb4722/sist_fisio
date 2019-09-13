@@ -30,12 +30,63 @@ export class DataApiService {
     const url_api_get_categoria = '/stock-pwfe/categoria/'+idCategoria;
     return this.http.get(url_api_get_categoria);
   }
-  getSubcategorias(idCategoria: any): Observable<any> {
-    console.log(idCategoria, JSON.stringify(idCategoria));
-    const params = new HttpParams().set('ejemplo', JSON.stringify(idCategoria));
-    const url_get_subcategorias = '/stock-pwfe/tipoProducto';
-    console.log(params);
 
-    return this.http.get(url_get_subcategorias, {params: params});
+  getAllSubcategorias(filtros:any): Observable<any> {
+    const params = new HttpParams().set('ejemplo', JSON.stringify(filtros.ejemplo))
+                                  .set('orderBy',filtros.orderBy)
+                                  .set('orderDir',filtros.orderDir)
+                                  .set('inicio',filtros.inicio)
+                                  .set('cantidad',filtros.cantidad)
+                                    ;
+    console.log(params);
+    const url_get_subcategorias = '/stock-pwfe/tipoProducto';
+    return this.http.get(url_get_subcategorias,{params: params});
+  }
+  getCategorias(){
+    const url_api_get_categoria = '/stock-pwfe/categoria?orderBy=descripcion&orderDir=asc';
+    return this.http.get(url_api_get_categoria);
+  }
+  addSubCategorias(form){
+    const url_api_post_sub_categoria = '/stock-pwfe/tipoProducto';
+    const body={
+      "idCategoria":{
+      "idCategoria": form.idCategoria
+      },
+      "descripcion":form.descripcion
+      };
+      console.log('body',body);
+    return this.http.post(url_api_post_sub_categoria,body);
+  }
+  editSubCategoria(form:any){
+    // const data ={
+    //   "idTipoProducto": form.idTipoProducto,
+    //   "descripcion": form.descripcion,
+    //   "flagVisible": form.flagVisible,
+    //   "idCategoria": {
+    //       "idCategoria": form.idCategoria,
+    //       "descripcion": form.descripcion_cat,
+    //       "flagVisible": form.flagVisible_cat,
+    //       "posicion": form.posicion_catt
+    //   },
+    //   "posicion": form.posicion
+    // };
+    const url_put_sub_cat= '/stock-pwfe/tipoProducto';
+    return this.http.put(url_put_sub_cat,form);
+  }
+  getOneSubCategoria(iDSubcategoria) {
+    const url_api_get_sub_categoria = '/stock-pwfe/tipoProducto/' + iDSubcategoria;
+    return this.http.get(url_api_get_sub_categoria);
+  }
+  deleteSubCategoria (iDSubcategoria: any): Observable<any> {
+    const url_api_delete_sub_categoria = '/stock-pwfe/tipoProducto/' + iDSubcategoria;
+    console.log(url_api_delete_sub_categoria);
+    
+    const httpOptions= {
+      headers: new HttpHeaders({
+        'Content-Type':'application/json',
+        'usuario':'gustavo'
+      })
+    };
+    return this.http.delete(url_api_delete_sub_categoria, httpOptions);
   }
 }
