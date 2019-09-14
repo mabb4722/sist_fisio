@@ -1,0 +1,47 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-8">
+              <div class="card ">
+                  <div class="card-header card-header-rose card-header-icon">
+                      <div class="card-icon">
+                          <i class="material-icons">create</i>
+                      </div>
+                      <h4 class="card-title">Agregar Persona</h4>
+                  </div>
+                  <div class="card-body ">
+                      <form method="#" action="#">
+                          <mat-form-field class="example-full-width">
+                              <input matInput placeholder="Nombre" type="text" id="nombre_paciente">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Apellido" type="text" id="apellido_paciente">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Teléfono" type="text" id="telefono_paciente">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Email" type="email" id="email_paciente">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="RUC" type="text" required id="ruc_paciente">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Cédula de Identidad" required type="text" id="cedula_paciente">
+                          </mat-form-field>
+                          <mat-form-field >
+                            <input matInput [matDatepicker]="picker" id="fecha_de_nacimiento_paciente" placeholder="Fecha de Nacimiento" (click)="picker.open()">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+                      </form>
+                  </div>
+                  <div class="card-footer ">
+                      <button mat-raised-button type="submit" class="btn btn-fill btn-rose" (click)="onAddCategoria()">Agregar</button>
+                      <a mat-raised-button type="submit" class="btn btn-fill btn-primary" href="#/pacientes/listar">Ir al listado</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

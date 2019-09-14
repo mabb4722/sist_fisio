@@ -22,6 +22,26 @@ export interface ChildrenItems {
 
 //Menu Items
 export const ROUTES: RouteInfo[] = [{
+        path: '/presentacion-producto',
+        title: 'Presentacion Producto',
+        type: 'link',
+        icontype: 'list_alt'
+    }/*,{
+        path: '/pacientes',
+        title: 'Pacientes',
+        type: 'link',
+        icontype: 'event_note'}*/
+    ,{
+        path: '/pacientes',
+        title: 'Pacientes',
+        type: 'sub',
+        icontype: 'event_note',
+        collapse: 'pacientes',
+        children: [
+            {path: 'agregar', title: 'Agregar Personas', ab:'AP'},
+            {path: 'listar', title: 'Listar Personas', ab:'LP'}
+        ]
+    },{
         path: '/dashboard',
         title: 'Dashboard',
         type: 'link',

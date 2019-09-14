@@ -11,8 +11,13 @@ export const AppRoutes: Routes = [
     }, {
       path: '',
       component: AdminLayoutComponent,
-      children: [
-          {
+      children: [{
+            path: 'presentacion-producto',
+            loadChildren: './presentacion-producto/presentacion-producto.module#PresentacionProductoModule'
+    },{
+        path: 'pacientes',
+        loadChildren: './pacientes/pacientes.module#PacientesModule'
+    },{
         path: '',
         loadChildren: './dashboard/dashboard.module#DashboardModule'
     }, {
