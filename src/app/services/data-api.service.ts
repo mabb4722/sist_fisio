@@ -37,6 +37,7 @@ export class DataApiService {
                                   .set('orderDir',filtros.orderDir)
                                   .set('inicio',filtros.inicio)
                                   .set('cantidad',filtros.cantidad)
+                                  .set('like', filtros.like)
                                     ;
     console.log(params);
     const url_get_subcategorias = '/stock-pwfe/tipoProducto';

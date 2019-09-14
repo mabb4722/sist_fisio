@@ -28,8 +28,10 @@ export class SubcategoriasComponent implements OnInit {
     orderDir: 'asc',
     inicio: 0,
     cantidad: 10,
-    ejemplo: {idCategoria:{idCategoria: null}}
+    ejemplo: null,
+    like:null
 };
+filtroDescripcion= "";
 private form = {
   descripcion: null,
   idCategoria: null
@@ -75,6 +77,12 @@ selectedValueEdit=null;
           array.push([this.subcategorias.lista[i].idTipoProducto, this.subcategorias.lista[i].descripcion,this.subcategorias.lista[i].idCategoria.descripcion ]) ;
       }
       this.dataRows= array
+      if (this.subcategorias.lista.length > 0) {
+        $('#tbodydefault').hide();
+      } else {
+        $('#tbodydefault').show();
+        
+      }
     } );
   }
   sortData(sort: Sort) {
@@ -201,6 +209,16 @@ selectedValueEdit=null;
      
       
     }
+  }
+  filtroCat(value){
+    this.filtros.like=null;
+    this.filtros.ejemplo = {idCategoria:{idCategoria:value}};
+    this.getListSubCategorias();
+  }
+  filtrarDescripcion(event){
+    this.filtros.ejemplo = {descripcion:$('#filtDes').val()};
+    this.filtros.like='S';
+    this.getListSubCategorias();
   }
 
 }
