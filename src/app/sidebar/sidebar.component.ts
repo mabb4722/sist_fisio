@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import PerfectScrollbar from 'perfect-scrollbar';
+import swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 declare const $: any;
 
@@ -102,7 +104,7 @@ export const ROUTES: RouteInfo[] = [{
         children: [
             {path: 'pricing', title: 'Pricing', ab: 'P'},
             {path: 'timeline', title: 'Timeline Page', ab: 'TP'},
-            {path: 'login', title: 'Login Page', ab: 'LP'},
+            // {path: 'login', title: 'Login Page', ab: 'LP'},
             {path: 'register', title: 'Register Page', ab: 'RP'},
             {path: 'lock', title: 'Lock Screen Page', ab: 'LSP'},
             {path: 'user', title: 'User Page', ab: 'UP'}
@@ -137,19 +139,33 @@ export const ROUTES: RouteInfo[] = [{
 export class SidebarComponent implements OnInit {
     public menuItems: any[];
     ps: any;
+    usuario = localStorage.getItem('usuario');
+    loginExitoso = localStorage.getItem('loginExitoso');
     isMobileMenu() {
         if ($(window).width() > 991) {
             return false;
         }
         return true;
     }
-
+    constructor(private _router: Router){ }
     ngOnInit() {
-        this.menuItems = ROUTES.filter(menuItem => menuItem);
-        if (window.matchMedia(`(min-width: 960px)`).matches && !this.isMac()) {
-            const elemSidebar = <HTMLElement>document.querySelector('.sidebar .sidebar-wrapper');
-            this.ps = new PerfectScrollbar(elemSidebar);
+        if(this.loginExitoso== 'false'){
+            this._router.navigate(['pages/login']);
+            swal({
+                title: 'Error!',
+                text: 'Para acceder al sistema loguearse primero!',
+                type: 'error',
+                confirmButtonClass: "btn btn-info",
+                buttonsStyling: false
+              })
+        }else{
+            this.menuItems = ROUTES.filter(menuItem => menuItem);
+            if (window.matchMedia(`(min-width: 960px)`).matches && !this.isMac()) {
+                const elemSidebar = <HTMLElement>document.querySelector('.sidebar .sidebar-wrapper');
+                this.ps = new PerfectScrollbar(elemSidebar);
+            }
         }
+        
     }
     updatePS(): void  {
         if (window.matchMedia(`(min-width: 960px)`).matches && !this.isMac()) {

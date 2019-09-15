@@ -90,4 +90,18 @@ export class DataApiService {
     };
     return this.http.delete(url_api_delete_sub_categoria, httpOptions);
   }
+  getUsuariosLogin(){
+    const url_usuarios = 'stock-pwfe/persona';
+    const params = new HttpParams().set('ejemplo',JSON.stringify({soloUsuariosDelSistema:true}));
+    return this.http.get(url_usuarios,{params:params});
+  }
+  getTotalReservas(){
+    const url= 'stock-pwfe/reserva';
+    return this.http.get(url);
+  }
+  getTotalPacientes(){
+    const url= 'stock-pwfe/persona';
+    const params = new HttpParams().set('ejemplo',JSON.stringify({soloUsuariosDelSistema:false}));
+    return this.http.get(url,{params:params});
+  }
 }
