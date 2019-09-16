@@ -3,7 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import { APP_BASE_HREF } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {
   MatAutocompleteModule,
@@ -84,7 +84,7 @@ import {DataApiService} from './services/data-api.service';
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule
-  ]
+  ],
 })
 export class MaterialModule {}
 
@@ -94,7 +94,7 @@ export class MaterialModule {}
         BrowserAnimationsModule,
         FormsModule,
         RouterModule.forRoot(AppRoutes,{
-          useHash: true
+          useHash: true, onSameUrlNavigation: 'reload'
         }),
         HttpClientModule,
         MaterialModule,
@@ -102,7 +102,9 @@ export class MaterialModule {}
         SidebarModule,
         NavbarModule,
         FooterModule,
-        FixedpluginModule
+        FixedpluginModule,
+        ReactiveFormsModule,
+        
     ],
     declarations: [
         AppComponent,

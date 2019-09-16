@@ -82,20 +82,20 @@ export class DataTableComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     getListCategorias() {
-        this.dataApi.getAllCategorias().subscribe(categorias => {
-            this.categorias = categorias;
-            const array = [];
-            for (let i = 0; i < this.categorias.lista.length; i++ ) {
-                array.push([this.categorias.lista[i].idCategoria, this.categorias.lista[i].descripcion ]) ;
+        // this.dataApi.getAllCategorias().subscribe(categorias => {
+        //     this.categorias = categorias;
+        //     const array = [];
+        //     for (let i = 0; i < this.categorias.lista.length; i++ ) {
+        //         array.push([this.categorias.lista[i].idCategoria, this.categorias.lista[i].descripcion ]) ;
 
-            }
-            this.dataTable = {
-                headerRow: [ 'Name', 'Position' ],
-                footerRow: [ 'Name', 'Position' ],
+        //     }
+        //     this.dataTable = {
+        //         headerRow: [ 'Name', 'Position' ],
+        //         footerRow: [ 'Name', 'Position' ],
 
-                dataRows: array
-            };
-        } );
+        //         dataRows: array
+        //     };
+        // } );
     }
 }
 
