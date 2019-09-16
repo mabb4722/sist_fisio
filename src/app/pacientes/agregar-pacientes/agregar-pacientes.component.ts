@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import {DataApiService} from '../../services/data-api.service';
+import {DataApiService} from '../../services/pacientes/data-api.service';
 import {Router} from '@angular/router';
 
 declare const $: any;

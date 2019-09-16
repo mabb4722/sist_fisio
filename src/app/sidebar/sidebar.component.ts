@@ -23,7 +23,7 @@ export interface ChildrenItems {
 //Menu Items
 export const ROUTES: RouteInfo[] = [{
         path: '/presentacion-producto',
-        title: 'Presentacion Producto',
+        title: 'Presentación de Productos',
         type: 'link',
         icontype: 'list_alt'
     }/*,{
