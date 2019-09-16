@@ -3,6 +3,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DataApiService} from '../../services/data-api.service';
 import {Router} from '@angular/router';
+import swal from 'sweetalert2';
 
 
 
@@ -29,6 +30,15 @@ export class AgregarcategoriaComponent implements OnInit {
                 data  => {
                     console.log('#/categorias/categorias_list');
                     this._router.navigate(['/categorias/categorias_list']);
+                    swal(
+                        {
+                          title: 'Categoría creada!',
+                          text: 'Categoría creada con éxito!',
+                          type: 'success',
+                          confirmButtonClass: "btn btn-success",
+                          buttonsStyling: false
+                        }
+                      )
                     
                 });
         }

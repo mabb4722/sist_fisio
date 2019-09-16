@@ -124,7 +124,7 @@ export const ROUTES: RouteInfo[] = [{
         path: '/sub_categorias',
         title: 'Sub-Categorias',
         type: 'sub',
-        icontype: 'content_paste',
+        icontype: 'description',
         collapse: 'sub_categorias',
         children: [
             {path: 'sub_categorias_list', title: 'Sub-Categorias', ab: 'SCAT'},

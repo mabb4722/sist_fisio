@@ -82,13 +82,13 @@ export class DataApiService {
     const url_api_delete_sub_categoria = '/stock-pwfe/tipoProducto/' + iDSubcategoria;
     console.log(url_api_delete_sub_categoria);
     
-    const httpOptions= {
-      headers: new HttpHeaders({
-        'Content-Type':'application/json',
-        'usuario':'gustavo'
-      })
-    };
-    return this.http.delete(url_api_delete_sub_categoria, httpOptions);
+    // const httpOptions= {
+    //   headers: new HttpHeaders({
+    //     'Content-Type':'application/json',
+    //     'usuario':'gustavo'
+    //   })
+    // };
+    return this.http.delete(url_api_delete_sub_categoria);
   }
   getUsuariosLogin(){
     const url_usuarios = 'stock-pwfe/persona';

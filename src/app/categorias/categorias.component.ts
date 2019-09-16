@@ -5,6 +5,7 @@ import {DataApiService} from '../services/data-api.service';
 import {Router} from '@angular/router';
 import { PageEvent } from '@angular/material';
 import {Sort} from '@angular/material/sort';
+import swal from 'sweetalert2';
 
 // declare interface DataTable {
 //     headerRow: string[];
@@ -71,7 +72,16 @@ export class CategoriasComponent implements OnInit{
         $('#modal_eliminar_categoria').modal('hide');
         this.dataApi.deleteCategoria(this.eliminarID).subscribe(data  => {
             this.categorias.lista = this.categorias.lista.filter(item => item.idCategoria !== this.eliminarID);
-            $('#eliminado_exitoso').show();
+            // $('#eliminado_exitoso').show();
+            swal(
+                {
+                  title: 'Categoría eliminada!',
+                  text: 'Categoría eliminada con éxito!',
+                  type: 'success',
+                  confirmButtonClass: "btn btn-success",
+                  buttonsStyling: false
+                }
+              )
             this.getListCategorias();
             this._router.navigate(['categorias/categorias_list']);
 
@@ -94,7 +104,15 @@ export class CategoriasComponent implements OnInit{
             this.categoriaEditar = data
             if (this.categoriaEditar != null) {
                 this.dataApi.editCategoria(this.categoriaEditar, descripcion).subscribe(data  => {
-                    $('#editado_exitoso').show();
+                    swal(
+                        {
+                          title: 'Categoría editada!',
+                          text: 'Categoría editada con éxito!',
+                          type: 'success',
+                          confirmButtonClass: "btn btn-success",
+                          buttonsStyling: false
+                        }
+                      )
                     console.log('esta parte');
                     console.log(data);
                     $('#categoria_descripcion' + this.editarID).html(descripcion);
