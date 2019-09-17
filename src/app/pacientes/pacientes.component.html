@@ -1,6 +1,6 @@
 <div class="main-content">
     <div class="container-fluid">
-        <div class="alert alert-danger" role="alert" id="eliminado_exitoso" style="display: none">
+        <div class="alert alert-success" role="alert" id="eliminado_exitoso" style="display: none">
             Persona eliminada con éxito!
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -9,6 +9,12 @@
         <div class="alert alert-success" role="alert" id="editado_exitoso" style="display: none">
             Persona editada con éxito!
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="alert alert-danger" role="alert" id="eliminar_error" style="display: none">
+            La persona seleccionada no pudo ser eliminada. Mensaje de error: {{eliminarError}}
+            <button type="button" class="close" (click)="closeEliminarError()" data-dismiss="modal"  aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -29,7 +35,6 @@
                         </div>
                         <div class="material-datatables">
                             <div class="table-responsive">
-
                                 <table id="datatables" class="table table-striped table-no-bordered table-hover" matSort
                                     (matSortChange)="sortData($event)" cellspacing="0" width="100%" style="width:100%">
                                     <thead *ngIf="pacientes">
@@ -107,8 +112,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>Está seguro que desea eliminar a la persona <span id="apellido_persona"></span>, <span
-                                id="nombre_persona"> </span> con ci <span id="ci_persona"></span>? </p>
+                        <p>Está seguro que desea eliminar a la persona con Id: <span id="id_persona"></span>? </p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" (click)="eliminarPersona()">Aceptar</button>

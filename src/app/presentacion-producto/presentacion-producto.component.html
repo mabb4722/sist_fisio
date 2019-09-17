@@ -1,9 +1,15 @@
 <div class="main-content">
   <div class="container-fluid">
+      <div class="alert alert-danger" role="alert" id="eliminar_error" style="display: none">
+          La Presentación de Producto seleccionada no pudo ser eliminada. Mensaje de error: {{eliminarError}}
+          <button type="button" class="close" (click)="closeEliminarError()" data-dismiss="modal"  aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
     <div class="row">
       <div class="col-md-12">
         <div class="card">
-          <div class="card-header card-header-icon card-header-rose">
+          <div class="card-header card-header-icon card-header-primary">
             <div class="card-icon">
               <i class="material-icons">assignment</i>
             </div>
@@ -15,16 +21,16 @@
             </div>
             <div class="material-datatables">
               <div class="table-responsive">
-                <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0"
-                  width="100%" style="width:100%">
+                <table id="datatables" class="table table-striped table-no-bordered table-hover" matSort
+                  (matSortChange)="sortData($event)" cellspacing="0" width="100%" style="width:100%">
                   <thead *ngIf="presentacionProductos">
                     <tr>
-                      <th>{{ dataTable.headerRow[0] }}</th>
-                      <th>{{ dataTable.headerRow[1] }}</th>
-                      <th>{{ dataTable.headerRow[2] }}</th>
-                      <th>{{ dataTable.headerRow[3] }}</th>
+                      <th mat-sort-header="idPresentacionProducto">{{ dataTable.headerRow[0] }}</th>
+                      <th mat-sort-header="nombre">{{ dataTable.headerRow[1] }}</th>
+                      <th mat-sort-header="descripcion">{{ dataTable.headerRow[2] }}</th>
+                      <th mat-sort-header="idProducto">{{ dataTable.headerRow[3] }}</th>
                       <th>{{ dataTable.headerRow[4] }}</th>
-                      <th>Acciones</th>
+                      <th>{{ dataTable.headerRow[5] }}</th>
                     </tr>
                   </thead>
                   <tfoot *ngIf="presentacionProductos">
@@ -34,6 +40,7 @@
                       <th>{{ dataTable.footerRow[2] }}</th>
                       <th>{{ dataTable.footerRow[3] }}</th>
                       <th>{{ dataTable.footerRow[4] }}</th>
+                      <th>{{ dataTable.footerRow[5] }}</th>
                     </tr>
                   </tfoot>
                   <tbody *ngIf="presentacionProductos">
@@ -48,18 +55,80 @@
                           <i class="material-icons">edit</i>
                         </button>
                         <button mat-raised-button type="button" class="btn btn-danger"
-                          (click)="openModal(row[0],row[1],row[2], row[6])">
+                          (click)="openEliminarModal(row[0])">
                           <i class="material-icons">close</i>
                         </button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
+                <mat-paginator [length]="cantidadTotalDePresentacionProducto" [pageSize]="10" [pageSizeOptions]="pageSizeOptions"
+                  (page)="paginacion($event)">
+                </mat-paginator>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="modal" tabindex="-1" role="dialog" style="display: none" id="modal_eliminar_presentacion_producto">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">Eliminar Presentacion de Producto</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <p>Está seguro que desea eliminar a la Presenacion de Producto con Id: <span id="id_presentacion_producto"></span>? </p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" (click)="eliminarPresentacionProducto()">Aceptar</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  
+  <div class="modal" tabindex="-1" role="dialog" style="display: none" id="modal_editar_presentacion_producto">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">Editar Presentación Producto</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+
+                  <mat-form-field class="example-full-width">
+                      <input matInput placeholder="Código" type="text" id="codigo">
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Servicio" type="text" id="flagServicio">
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Id del Producto" type="text" id="idProducto">
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Nombre" type="text" id="nombre">
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Precio de Venta" type="text" id="precioVenta">
+                  </mat-form-field>
+
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" (click)="editarPresentacionProducto()">Aceptar</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+              </div>
+          </div>
+      </div>
+  </div>
+  <!--end modal -->
+
   </div>
 </div>

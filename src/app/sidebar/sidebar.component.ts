@@ -23,23 +23,23 @@ export interface ChildrenItems {
 //Menu Items
 export const ROUTES: RouteInfo[] = [{
         path: '/presentacion-producto',
-        title: 'Presentación de Productos',
-        type: 'link',
-        icontype: 'list_alt'
-    }/*,{
-        path: '/pacientes',
-        title: 'Pacientes',
-        type: 'link',
-        icontype: 'event_note'}*/
-    ,{
+        title: 'Presentación Productos',
+        type: 'sub',
+        icontype: 'event_note',
+        collapse: 'presentacion-producto',
+        children: [
+            {path: 'agregar', title: 'Agregar', ab:'APP'},
+            {path: 'listar', title: 'Listar', ab:'LPP'}
+        ]
+    },{
         path: '/pacientes',
         title: 'Pacientes',
         type: 'sub',
         icontype: 'event_note',
         collapse: 'pacientes',
         children: [
-            {path: 'agregar', title: 'Agregar Personas', ab:'AP'},
-            {path: 'listar', title: 'Listar Personas', ab:'LP'}
+            {path: 'agregar', title: 'Agregar', ab:'AP'},
+            {path: 'listar', title: 'Listar', ab:'LP'}
         ]
     },{
         path: '/dashboard',

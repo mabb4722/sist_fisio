@@ -1,0 +1,45 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="alert alert-danger" role="alert" id="agregar_error" style="display: none">
+            La Presentación de Producto no pudo ser creada. Mensaje de error: {{agregarError}}
+            <button type="button" class="close" (click)="closeAgregarError()" data-dismiss="modal"  aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card ">
+                    <div class="card-header card-header-primary card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">assignment</i>
+                        </div>
+                        <h4 class="card-title">Agregar Presentación de Producto</h4>
+                    </div>
+                    <div class="card-body ">
+                        <form method="#" action="#">
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Código" type="text" id="codigo">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                              <input matInput placeholder="Servicio" type="text" id="flagServicio">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                              <input matInput placeholder="Id del Producto" type="text" id="idProducto">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                              <input matInput placeholder="Nombre" type="text" id="nombre">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                              <input matInput placeholder="Precio de Venta" type="text" id="precioVenta">
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="card-footer ">
+                        <button mat-raised-button type="submit" class="btn btn-fill btn-rose" (click)="onAddPresentacionProducto()">Agregar</button>
+                        <a mat-raised-button type="submit" class="btn btn-fill btn-primary" href="#/presentacion-producto/listar">Ir al listado</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>

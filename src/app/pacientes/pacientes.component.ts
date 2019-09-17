@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataApiService } from '../services/pacientes/data-api.service';
 import { Router } from '@angular/router';
-import { PageEvent } from '@angular/material';
 import { Sort } from '@angular/material/sort';
 
 declare interface DataTable {
@@ -32,13 +31,11 @@ export class PacientesComponent implements OnInit{
         tipo_de_persona: 'All'
     };
 
-    sortedData: any;
-    pageEvent: PageEvent;
     pacientes: any;
     eliminarID: any;
     editarID: any;
     personaEditar: any;
-
+    eliminarError: any;
     constructor(private dataApi: DataApiService, private _router: Router) {}
 
     ngOnInit() {
@@ -57,28 +54,28 @@ export class PacientesComponent implements OnInit{
         this.getListPacientes(this.filtros);
     }
 
-    openModal(id, nombre, apellido, ci) {
-        $('#nombre_persona').html(nombre);
-        $('#apellido_persona').html(apellido);
-        $('#ci_persona').html(ci);
-
+    openModal(id) {
+        $('#id_persona').html(id);
         this.eliminarID = id;
         $('#modal_eliminar_persona').modal('show');
     }
 
-
-    
     eliminarPersona() {
         $('#modal_eliminar_persona').modal('hide');
         this.dataApi.deletePersona(this.eliminarID).subscribe(data => {
-            console.log(data.error)
             this.pacientes.lista = this.pacientes.lista.filter(item => item.idPersona !== this.eliminarID);
             $('#eliminado_exitoso').show();
             this.getListPacientes(this.filtros);
             this._router.navigate(['pacientes/listar']);
+        },
+        error => {this.eliminarError = error
+            $('#eliminar_error').show();
         });
     }
 
+    closeEliminarError(){
+        $('#eliminar_error').hide();
+    }
 
     getListPacientes(filtros) {
         this.dataApi.getAllPacientes(filtros).subscribe(pacientes => {

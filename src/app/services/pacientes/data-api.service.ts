@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse , HttpErrorResponse} from '@angular/common/http';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs';
-
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 @Injectable({
     providedIn: 'root'
 })
@@ -50,10 +51,15 @@ export class DataApiService {
         const url_api_post_persona = '/stock-pwfe/persona';
         return this.http.post < any > (url_api_post_persona, paciente);
     }
+
     deletePersona(idPersona: any): Observable <any> {
         const url_api_delete_persona = '/stock-pwfe/persona/' + idPersona;
         console.log(url_api_delete_persona);
-        return this.http.delete < any > (url_api_delete_persona)
+        return this.http.delete < any > (url_api_delete_persona).catch(this.errorHandler)
+    }
+
+    errorHandler(error: HttpErrorResponse){
+        return Observable.throw(error.error || "Server Error");
     }
 
     getPersonaById(idPersona) {

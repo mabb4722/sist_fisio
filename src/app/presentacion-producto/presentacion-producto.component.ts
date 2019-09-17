@@ -1,5 +1,14 @@
-import { Component, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
-import { DataApiService } from '../services/presentacion-producto/data-api.service';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+import {
+  DataApiService
+} from '../services/presentacion-producto/data-api.service';
+import {
+  Sort
+} from '@angular/material/sort';
+import { Router } from '@angular/router';
 
 declare interface DataTable {
   headerRow: string[];
@@ -15,91 +24,128 @@ declare const $: any;
   styleUrls: ['./presentacion-producto.component.css']
 })
 
-export class PresentacionProductoComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class PresentacionProductoComponent implements OnInit {
   public dataTable: DataTable;
   public presentacionProductos: any;
-  public bandera: boolean;
+  public cantidadTotalDePresentacionProducto = 0;
+  public pageSizeOptions = [5, 10, 25, 100];  
+  public eliminarError;
+  public eliminarID;
 
-  constructor(private dataApi: DataApiService) {}
+  public editarID;
+  public presentacionProductoEditar;
+
+  private filtros = {
+    orderBy: 'idPresentacionProducto',
+    orderDir: 'asc',
+    inicio: 0,
+    cantidad: 10,
+  }
+
+  constructor(private dataApi: DataApiService, private _router: Router) {}
 
   ngOnInit() {
-    this.getListPresentacionProductos();
+    this.getListPresentacionProductos(this.filtros);
   }
 
-  ngAfterViewInit() {
-
+  sortData(sort: Sort) {
+    this.filtros.orderBy = sort.active;
+    this.filtros.orderDir = sort.direction;
+    this.getListPresentacionProductos(this.filtros);
   }
 
-  ngAfterViewChecked() {
-    if (this.presentacionProductos && !this.bandera) {
-      this.bandera = true;
-      $('#datatables').DataTable({
-        "pagingType": "full_numbers",
-        "lengthMenu": [
-          [10, 25, 50, -1],
-          [10, 25, 50, "All"]
-        ],
-        responsive: true,
-        language: {
-          search: "_INPUT_",
-          searchPlaceholder: "Search records",
-        }
-
-      });
-
-      const table = $('#datatables').DataTable();
-
-      // Edit record
-      table.on('click', '.edit', function (e) {
-        let $tr = $(this).closest('tr');
-        if ($($tr).hPasClass('child')) {
-          $tr = $tr.prev('.parent');
-        }
-
-        var data = table.row($tr).data();
-        alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
-        e.preventDefault();
-      });
-
-      // Delete a record
-      table.on('click', '.remove', function (e) {
-        const $tr = $(this).closest('tr');
-        table.row($tr).remove().draw();
-        e.preventDefault();
-      });
-
-      //Like record
-      table.on('click', '.like', function (e) {
-        alert('You clicked on Like button');
-        e.preventDefault();
-      });
-
-      $('.card .material-datatables label').addClass('form-group');
-
-    }
+  paginacion(event) {
+    this.filtros.cantidad = event.pageSize;
+    this.filtros.inicio = event.pageSize * event.pageIndex;
+    this.getListPresentacionProductos(this.filtros);
   }
 
-  getListPresentacionProductos() {
-    this.dataApi.getAllPresentacionProducto().subscribe(presentacionProductos => {
+  getListPresentacionProductos(filtros) {
+    this.dataApi.getAllPresentacionProducto(filtros).subscribe(presentacionProductos => {
       this.presentacionProductos = presentacionProductos;
+      this.cantidadTotalDePresentacionProducto = this.presentacionProductos.totalDatos;
 
       const array = [];
       for (let i = 0; i < this.presentacionProductos.lista.length; i++) {
         array.push(
-          [ this.presentacionProductos.lista[i].idPresentacionProducto, 
-            this.presentacionProductos.lista[i].nombre, 
+          [this.presentacionProductos.lista[i].idPresentacionProducto,
+            this.presentacionProductos.lista[i].nombre,
             this.presentacionProductos.lista[i].descripcion,
-            this.presentacionProductos.lista[i].idProducto.idProducto, 
-            this.presentacionProductos.lista[i].idProducto.idTipoProducto.idTipoProducto ]
+            this.presentacionProductos.lista[i].idProducto.idProducto,
+            this.presentacionProductos.lista[i].idProducto.idTipoProducto.idTipoProducto
+          ]
         );
       }
 
       this.dataTable = {
-        headerRow: ['ID', 'Nombre', 'Descripción', 'ID Producto', 'ID Tipo de Producto'],
-        footerRow: ['ID', 'Nombre', 'Descripción', 'ID Producto', 'ID Tipo de Producto'],
+        headerRow: ['ID', 'Nombre', 'Descripción', 'ID Producto', 'ID Tipo de Producto', 'Acciones'],
+        footerRow: ['ID', 'Nombre', 'Descripción', 'ID Producto', 'ID Tipo de Producto', 'Acciones'],
         dataRows: array
       };
 
     });
   }
+
+  openEliminarModal(id) {
+    $('#id_presentacion_producto').html(id);
+    this.eliminarID = id;
+    $('#modal_eliminar_presentacion_producto').modal('show');
+  }
+
+
+  eliminarPresentacionProducto() {
+    $('#modal_eliminar_presentacion_producto').modal('hide');
+    this.dataApi.deletePresentacionProducto(this.eliminarID).subscribe(data => {
+        this.presentacionProductos.lista = this.presentacionProductos.lista.filter(item => item.idPresentacionProducto !== this.eliminarID);
+        $('#eliminado_exitoso').show();
+        this.getListPresentacionProductos(this.filtros);
+        this._router.navigate(['presentacion-producto/listar']);
+    },
+    error => {this.eliminarError = error
+        $('#eliminar_error').show();
+    });
+  }
+
+  closeEliminarError(){
+    $('#eliminar_error').hide();
+  }
+
+  openModalEditar(row) {
+    this.dataApi.getPresentacionProductoById(row[0]).subscribe(data => {
+      this.presentacionProductoEditar = data;
+      $('#codigo').val(this.presentacionProductoEditar.codigo);
+      $('#flagServicio').val(this.presentacionProductoEditar.flagServicio);
+      $('#idProducto').val(this.presentacionProductoEditar.idProducto.idProducto);
+      $('#nombre').val(this.presentacionProductoEditar.nombre);
+      this.presentacionProductoEditar.existenciaProducto && $('#precioVenta').val(this.presentacionProductoEditar.existenciaProducto.precioVenta);
+    }); 
+    this.editarID = row[0];
+    $('#modal_editar_presentacion_producto').modal('show');
+}
+
+editarPresentacionProducto() {
+    $('#modal_editar_presentacion_producto').modal('hide');
+    const presentacionProducto={
+      "codigo":  $('#codigo').val(),
+      "flagServicio":  $('#flagServicio').val(),
+      "idProducto":  {
+        "idProducto": $('#idProducto').val()
+      },
+      "nombre":  $('#nombre').val(),
+      "existenciaProducto": {
+        "precioVenta": $('#precioVenta').val()
+      }
+    }
+    this.dataApi.getPresentacionProductoById(this.editarID).subscribe(data => {
+        this.presentacionProductoEditar = data
+        if (this.presentacionProductoEditar != null) {
+            this.dataApi.updatePresentacionProducto(this.presentacionProductoEditar, presentacionProducto).subscribe(data => {
+                $('#editado_exitoso').show();
+                // $('#categoria_descripcion' + this.editarID).html(descripcion);
+                this.getListPresentacionProductos(this.filtros);
+                this._router.navigate(['presentacion-producto/listar']);
+            });
+        }
+    });
+}
 }

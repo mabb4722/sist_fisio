@@ -6,7 +6,7 @@ import {AgregarPacientesComponent} from './agregar-pacientes//agregar-pacientes.
 
 export const PacientesRoutes: Routes = [
     {
-    path: '',
+        path: '',
         children: [ {
             path: 'listar',
             component: PacientesComponent
