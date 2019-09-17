@@ -24,8 +24,13 @@ export interface ChildrenItems {
 export const ROUTES: RouteInfo[] = [{
         path: '/reservas',
         title: 'Reservas',
-        type: 'link',
-        icontype: 'event_note'
+        type: 'sub',
+        icontype: 'event_note',
+        collapse: 'reservas',
+        children: [
+            {path: 'list', title: 'Reservas', ab:'R'},
+            {path: 'add', title: 'Crear Reserva', ab:'CR'}
+        ]
     },
     {
         path: '/dashboard',

@@ -7,6 +7,7 @@ import { MaterialModule } from '../app.module';
 import { ReservasRoutes } from './reservas.routing';
 
 import { ReservasComponent } from './reservas.component';
+import { AddReservaComponent } from './add-reserva/add-reserva.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { ReservasComponent } from './reservas.component';
     MaterialModule
   ],
   declarations: [
-      ReservasComponent
+      ReservasComponent,
+      AddReservaComponent
   ],
   exports: [ ReservasComponent ]
 })

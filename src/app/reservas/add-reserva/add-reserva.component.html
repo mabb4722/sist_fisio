@@ -1,0 +1,240 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header card-header-primary card-header-icon">
+                    <div class="card-icon">
+                      <i class="material-icons">event_note</i>
+                    </div>
+                    <h4 class="card-title">Crear reserva</h4>
+                  </div>
+                    <div class="card-body">
+                        <div class="toolbar">
+
+                          <!-- Modal Empleado -->
+                          <div class="modal fade" id="modalEmpleado" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLongTitle">Seleccionar empleado</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div style="display: flex; align-items: baseline;justify-content: space-between;">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="radio" name="filtroEmpleado" value="cedula" checked> Cédula
+                                                <span class="circle">
+                                                    <span class="check"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" name="filtroEmpleado" value="nombre"> Nombre
+                                            <span class="circle">
+                                                <span class="check"></span>
+                                            </span>
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" name="filtroEmpleado" value="apellido"> Apellido
+                                            <span class="circle">
+                                                <span class="check"></span>
+                                            </span>
+                                            </label>
+                                        </div>                                                    
+                                    </div>
+                                    <div style="display: flex; align-items: center;justify-content: space-between;">
+                                        <mat-form-field class="example-full-width">
+                                            <input id="buscarEmpleadoText" #buscarEmpleadoText matInput placeholder="Buscar...">
+                                        </mat-form-field>
+                                        <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListEmpleadosFiltrado(buscarEmpleadoText)">search</i>
+                                    </div>
+                                    <br />
+                                    <div style="display: flex; align-items: center;justify-content: space-between;">
+                                        <mat-form-field >
+                                            <mat-select placeholder="Seleccione el fisioterapeuta" (selectionChange)="selectChangeHandlerEmpleado($event.value)" >
+                                                <mat-option *ngFor="let empleado of empleados.lista" [value]="empleado" >
+                                                    {{ empleado.nombre }} {{ empleado.apellido }} - CI: {{ empleado.cedula }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListEmpleados(buscarEmpleadoText)">close</i>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                  <button type="button" class="btn btn-primary" (click)="seleccionarEmpleado(empleado.value)" data-dismiss="modal">Seleccionar</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Modal Cliente -->
+                          <div class="modal fade" id="modalCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Seleccionar cliente</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      <div style="display: flex; align-items: baseline;justify-content: space-between;">
+                                          <div class="form-check">
+                                              <label class="form-check-label">
+                                                  <input class="form-check-input" type="radio" name="filtroCliente" value="cedula" checked> Cédula
+                                                  <span class="circle">
+                                                      <span class="check"></span>
+                                                  </span>
+                                              </label>
+                                          </div>
+                                          <div class="form-check">
+                                              <label class="form-check-label">
+                                              <input class="form-check-input" type="radio" name="filtroCliente" value="nombre"> Nombre
+                                              <span class="circle">
+                                                  <span class="check"></span>
+                                              </span>
+                                              </label>
+                                          </div>
+                                          <div class="form-check">
+                                              <label class="form-check-label">
+                                              <input class="form-check-input" type="radio" name="filtroCliente" value="apellido"> Apellido
+                                              <span class="circle">
+                                                  <span class="check"></span>
+                                              </span>
+                                              </label>
+                                          </div>                                                    
+                                      </div>
+                                      <div style="display: flex; align-items: center;justify-content: space-between;">
+                                          <mat-form-field class="example-full-width">
+                                              <input id="buscarClienteText" #buscarClienteText matInput placeholder="Buscar...">
+                                          </mat-form-field>
+                                          <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListClientesFiltrado(buscarClienteText)">search</i>
+                                      </div>
+                                      <br />
+                                      <div style="display: flex; align-items: center;justify-content: space-between;">
+                                          <mat-form-field >
+                                              <mat-select placeholder="Seleccione el cliente" (selectionChange)="selectChangeHandlerCliente($event.value)" >
+                                                  <mat-option *ngFor="let cliente of clientes.lista" [value]="cliente" >
+                                                      {{ cliente.nombre }} {{ cliente.apellido }} - CI: {{ cliente.cedula }}
+                                                  </mat-option>
+                                              </mat-select>
+                                          </mat-form-field>
+                                          <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListClientes(buscarClienteText)">close</i>
+                                      </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <button type="button" class="btn btn-primary" (click)="seleccionarCliente(cliente)" data-dismiss="modal">Seleccionar</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <div class="col-md-12 mr-auto">
+                                <button style="background: none!important;
+                                border: none;
+                                padding: 0!important;
+                                /*input has OS specific font-family*/
+                                color: #069;
+                                cursor: pointer;" (click)="goToReservas()">﹤Volver a reservas</button>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 mr-auto">
+                                    <mat-form-field >
+                                        <input id="fechaAddReserva"  #fechaAddReserva matInput [matDatepicker]="picker3" placeholder="Fecha:" (click)="picker3.open()" >
+                                        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker3></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4 mr-auto" style="display: flex; justify-content: flex-end;">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input id="reservados" class="form-check-input" type="checkbox" value="" > Mostrar ya reservados
+                                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 mr-auto">
+                                        <div class="input-group no-border" style="border-bottom: solid 1px gray;">
+                                            <input id="empleadoSelect" #empleado type="text" value="" class="form-control" placeholder="Empleado" style="background: none;" readonly >    
+                                            <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer;" data-toggle="modal" data-target="#modalEmpleado">search</i>
+                                        </div>
+                                    </div>    
+                                    <div class="col-md-4 mr-auto">
+                                      <div style="display: flex; justify-content: flex-end;">
+                                        <button mat-raised-button class="btn btn-fill btn-rose" (click)="getAgendas(fechaAddReserva)">Buscar</button>
+                                      </div>
+                                    </div>
+                            </div>
+                            <div #tableAgendas *ngIf="agendas" class="material-datatables">
+                                <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                                      <thead>
+                                          <tr>
+                                            <th>Hora inicio</th>
+                                            <th>Hora Fin</th>
+                                            <th>Cliente</th>
+                                            <th>Seleccionar</th>
+                                          </tr>
+                                      </thead>
+                                      <tfoot>
+                                          <tr>
+                                              <th>Hora inicio</th>
+                                              <th>Hora Fin</th>
+                                              <th>Cliente</th>
+                                              <th>Seleccionar</th>
+                                          </tr>
+                                      </tfoot>
+                                      <tbody>
+                                          <tr *ngIf="agendas.length == 0 || !agendas">
+                                              <td colspan="7" style="text-align: center;">Intente una nueva búsqueda</td>
+                                          </tr>
+                                          <tr *ngFor="let row of agendas">
+                                              <td>{{row.horaInicioCadena[0]}}{{row.horaInicioCadena[1]}}:{{row.horaInicioCadena[2]}}{{row.horaInicioCadena[3]}}</td> 
+                                              <td>{{row.horaFinCadena[0]}}{{row.horaFinCadena[1]}}:{{row.horaFinCadena[2]}}{{row.horaFinCadena[3]}}</td>                                              
+                                              <td *ngIf="row.idCliente">{{row.idCliente.nombreCompleto}}</td>
+                                              <td *ngIf="!row.idCliente"></td>
+                                              <td *ngIf="!row.idCliente">
+                                                  <input type="radio" name="group" [value]='row' (click)=chooseAgenda(row)>
+                                              </td>
+                                              <td *ngIf="row.idCliente"></td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                              <br />
+                              <div *ngIf="agendas" class="row">
+                              <div class="col-md-8 mr-auto">
+                                  <div class="input-group no-border" style="border-bottom: solid 1px gray;">
+                                      <input id="clienteSelect" #cliente type="text" value="" class="form-control" placeholder="Cliente" style="background: none;" readonly>    
+                                      <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer;" data-toggle="modal" data-target="#modalCliente">search</i>
+                                  </div>
+                              </div>    
+                              <div class="col-md-4 mr-auto">
+                              <div style="display: flex; justify-content: flex-end;">
+                                  <button mat-raised-button type="submit" class="btn btn-fill btn-rose" (click)="postReserva()">Agregar reserva</button>
+                              </div> 
+                             </div>
+                            </div>
+                    </div>
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
