@@ -211,7 +211,7 @@ deleteReserva(aEditar){
   return this.http.get(url_api, {params: params, headers: headers});
  }
 
- postReserva(fechaCadena, horaInicioCadena, horaFinCadena, idEmpleado, idCliente){
+ postReserva(fechaCadena, horaInicioCadena, horaFinCadena, idEmpleado, idCliente, observacion){
   const url_api = '/stock-pwfe/reserva';
   /*const headers = new HttpHeaders ({
     'Content-Type': 'application/json',
@@ -224,6 +224,7 @@ deleteReserva(aEditar){
   objParams.horaFinCadena = horaFinCadena;
   objParams.idEmpleado = {idPersona: idEmpleado};
   objParams.idCliente = {idPersona: idCliente};
+  if (observacion) objParams.observacion = observacion;
   console.log("OBJPARAMS", objParams);
   return this.http.post(url_api, JSON.stringify(objParams), {headers: headers});
  }

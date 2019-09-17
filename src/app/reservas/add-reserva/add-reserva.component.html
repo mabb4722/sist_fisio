@@ -216,18 +216,21 @@
                               </div>
                               <br />
                               <div *ngIf="agendas" class="row">
-                              <div class="col-md-8 mr-auto">
+                              <div class="col-md-5 mr-auto">
                                   <div class="input-group no-border" style="border-bottom: solid 1px gray;">
                                       <input id="clienteSelect" #cliente type="text" value="" class="form-control" placeholder="Cliente" style="background: none;" readonly>    
                                       <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer;" data-toggle="modal" data-target="#modalCliente">search</i>
                                   </div>
                               </div>    
-                              <div class="col-md-4 mr-auto">
-                              <div style="display: flex; justify-content: flex-end;">
-                                  <button mat-raised-button type="submit" class="btn btn-fill btn-rose" (click)="postReserva()">Agregar reserva</button>
-                              </div> 
+                              <div class="col-md-7 mr-auto">
+                                  <mat-form-field class="example-full-width">
+                                      <input #observacion id="observacion" matInput placeholder="Observación..." >
+                                  </mat-form-field>
                              </div>
                             </div>
+                            <div *ngIf="agendas" style="display: flex; justify-content: flex-end;">
+                                <button mat-raised-button type="submit" class="btn btn-fill btn-rose" (click)="postReserva()">Agregar reserva</button>
+                            </div> 
                     </div>
                     <!-- end content-->
                 </div>

@@ -48,7 +48,7 @@ export class ReservasComponent implements OnInit, AfterViewInit {
     }  
     
     this.dataTable = {
-        headerRow: [ 'Fecha', 'Hora Inicio', 'Hora Fin', 'Profesional', 'Cliente', 'Observación', 'Asistió', 'Estado' ],
+        headerRow: [ 'Fecha', 'Hora Inicio', 'Hora Fin', 'Profesional', 'Cliente', 'Observación', 'Asistió (S-Sí / N-No)', 'Estado(R-Reservada / C-Cancelada)' ],
         footerRow: [ 'Fecha', 'Hora Inicio', 'Hora Fin', 'Profesional', 'Cliente', 'Observación', 'Asistió', 'Estado' ],
         dataRows: []
      };
