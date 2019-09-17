@@ -17,8 +17,8 @@ export class RegularTableComponent implements OnInit {
     categorias: any;
 
     ngOnInit() {
-        this.getListCategorias();
-        /**this.tableData1 = {
+        /**this.getListCategorias();
+        this.tableData1 = {
             headerRow: [ 'id', this.categorias],
             dataRows: [
                 ['1', 'Dakota Rice', '$36,738', 'Niger', 'Oud-Turnhout' ],
@@ -53,11 +53,8 @@ export class RegularTableComponent implements OnInit {
               ]
            }; */
     }
-    getListCategorias() {
-        this.dataApi.getAllCategorias().subscribe(categorias => {
-            this.categorias = categorias;
-            console.log("categorias", categorias);
-            console.log("this.categorias", this.categorias.totalDatos);
-        } );
-    }
+    // getListCategorias() {
+    //     this.dataApi.getAllCategorias().subscribe(categorias => {
+    //         this.categorias = categorias;        } );
+    // }
 }
