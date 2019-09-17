@@ -40,9 +40,13 @@ export class AddReservaComponent implements OnInit {
     //var agenda=$('input:radio[name=group]:checked').val();
     //console.log("AGENDA SELECCIONADA", agenda);
     //console.log("AGENDA fechaCadena", agenda.fechaCadena);
+    if (this.clienteSelect){
     this.dataApi.postReserva(this.agendaChoose.fechaCadena, this.agendaChoose.horaInicioCadena, this.agendaChoose.horaFinCadena, this.agendaChoose.idEmpleado.idPersona, this.clienteSelect.idPersona).subscribe(agendas => {
       this.getAgendas(this.fechaSelected);
     } );
+    } else {
+      alert("Seleccione un cliente.");
+    }
   }
 
   getAgendas(fecha){
