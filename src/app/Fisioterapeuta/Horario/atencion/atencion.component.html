@@ -1,0 +1,96 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="card ">
+          <div class="toolbar">
+  
+            <div class="col-md-12">
+                <button  mat-raised-button mat-min-fab (click)="buttonModal('buttonAddHorario')"
+                    class="btn btn-primary btn-round btn-fab float-left" data-toggle="modal" data-target="#exampleModal">
+                  <i class="material-icons">add_circle</i>
+                </button>
+                
+                <button  mat-raised-button mat-min-fab  (click)="buttonModal('buttonFilterHorario')"
+                class="btn btn-primary btn-round btn-fab float-left" data-toggle="modal" data-target="#exampleModal">
+                  <i class="material-icons">filter_list</i>
+                </button>
+  
+  
+            </div>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{nombre_modal}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body ">
+  
+                    <div *ngIf="!modalShow" class="container">
+                      <app-filtrar-horario-atencion (queryEvent)="onSubmitgetFisio($event)" [listEmpleado]="listEmpleado">
+                      </app-filtrar-horario-atencion>
+                    </div>
+  
+                    <div *ngIf="modalShow" class="container">
+                      <app-agregar-horario-atencion (queryEvent)="postHorarioAtencion($event)" [listEmpleado]="listEmpleado" [editarHorario]="editarHorario"></app-agregar-horario-atencion>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+  
+        <!--TABLA DE FISIOTERAPUETA -->
+        <div class="card ">
+          <table id="" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%"
+            style="width:100%">
+            <thead>
+  
+              <tr>
+                <th>Local</th>
+                <th>Empleado</th>
+                <th>Día Cadena</th>
+                <th>H. Apertura</th>
+                <th>H Cierre</th>
+                <th></th>
+             
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of listFisio">
+                <td>{{row.nombrelocal}}</td>
+                <td>{{row.Empleado}}</td>
+                <td>{{row.diaCadena}}</td>
+                <td>{{row.horaApertura}}</td>
+  
+                <td>{{row.horaCierre}}</td>
+                <td class="td-actions text-right">
+                      <button mat-raised-button type="button" class="btn btn-success"  data-toggle="modal" (click)="buttonModal('modificar',row)"  data-target="#exampleModal"> 
+                          <i class="material-icons">edit</i>
+                      </button>
+  
+                      <button mat-raised-button type="button" class="btn btn-danger" (click)="deleteHorarioAtencion(row['idPersonaHorarioAgenda'])">
+                          <i class="material-icons">close</i>
+                      </button>
+                  </td>
+              </tr>
+              
+            </tbody>
+          </table>
+          <li *ngFor="let item of [] | paginate: config"></li>
+          <pagination-controls (pageChange)="pageChanged($event)">
+  
+          </pagination-controls>
+  
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>

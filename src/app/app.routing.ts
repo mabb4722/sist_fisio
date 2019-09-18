@@ -3,10 +3,11 @@ import { Routes } from '@angular/router';
 import { AdminLayoutComponent } from './layouts/admin/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth/auth-layout.component';
 
+
 export const AppRoutes: Routes = [
     {
       path: '',
-      redirectTo: 'pages/login',
+      redirectTo: 'dashboard',
       pathMatch: 'full',
     }, {
       path: '',
@@ -15,7 +16,10 @@ export const AppRoutes: Routes = [
           {
         path: '',
         loadChildren: './dashboard/dashboard.module#DashboardModule'
-     },{
+    }, {
+        path: 'fisioterapeuta',
+        loadChildren: './Fisioterapeuta/fisioterapeuta.module#FisioterapeutaModule'
+    }, {
         path: 'components',
         loadChildren: './components/components.module#ComponentsModule'
     }, {
@@ -42,14 +46,6 @@ export const AppRoutes: Routes = [
     }, {
         path: '',
         loadChildren: './timeline/timeline.module#TimelineModule'
-    }, 
-    {
-          path: 'categorias',
-          loadChildren: './categorias/categorias.module#CategoriasModule'
-      },
-      {
-        path: 'sub_categorias',
-        loadChildren: './subcategorias/subcategorias.module#SubCategoriasModule'
     }
   ]}, {
       path: '',

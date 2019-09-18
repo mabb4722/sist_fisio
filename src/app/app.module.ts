@@ -3,8 +3,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import { APP_BASE_HREF } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import {NgxPaginationModule} from 'ngx-pagination';
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -50,6 +51,8 @@ import { AuthLayoutComponent } from './layouts/auth/auth-layout.component';
 
 import { AppRoutes } from './app.routing';
 import {DataApiService} from './services/data-api.service';
+import { ServiciosResumidoComponent } from './Reportes/servicios-resumido/servicios-resumido.component';
+import { ServiciosDetalladoComponent } from './Reportes/servicios-detallado/servicios-detallado.component';
 
 @NgModule({
   exports: [
@@ -83,8 +86,10 @@ import {DataApiService} from './services/data-api.service';
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+	NgxPaginationModule
   ],
+  declarations: [ServiciosResumidoComponent, ServiciosDetalladoComponent]
 })
 export class MaterialModule {}
 
@@ -94,7 +99,7 @@ export class MaterialModule {}
         BrowserAnimationsModule,
         FormsModule,
         RouterModule.forRoot(AppRoutes,{
-          useHash: true, onSameUrlNavigation: 'reload'
+          useHash: true
         }),
         HttpClientModule,
         MaterialModule,
@@ -102,14 +107,13 @@ export class MaterialModule {}
         SidebarModule,
         NavbarModule,
         FooterModule,
-        FixedpluginModule,
-        ReactiveFormsModule,
-        
+        FixedpluginModule
     ],
     declarations: [
         AppComponent,
         AdminLayoutComponent,
-        AuthLayoutComponent
+        AuthLayoutComponent,
+		
     ],
     providers: [DataApiService],
     bootstrap:    [ AppComponent ]
