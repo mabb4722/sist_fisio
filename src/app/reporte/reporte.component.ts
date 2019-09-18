@@ -3,7 +3,7 @@ import { DataApiService } from '../services/data-api.service';
 import { Router } from '@angular/router';
 import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
 import swal from 'sweetalert2';
-
+declare const $: any;
 @Component({
   selector: 'app-reporte',
   templateUrl: './reporte.component.html',
@@ -50,26 +50,35 @@ export class ReporteComponent implements OnInit {
     detalle={idDetalle:'',presentacion:'',precioUnitario:0,cantidad:0,total:0};    
     detalleArray= new Array();
     response:any;
+    agregarFichaEmpCl=false;
+    nombreEmpleado="";  
+    nombreCliente="";
+    empleados:any;
+    clientes : any;
+    empleadoSelect: any;
+    clienteSelect: any;
     ngOnInit() {    
         this.getLisServicio();  
-        // this.dataApi.getAllempleados().subscribe((fisioterapeutas:any)=>{
-        //     this.fisioterapeutas= fisioterapeutas;
-        // }); 
-        // this.dataApi.getAllpacientes().subscribe((pacientes:any)=>{
-        //     this.pacientes= pacientes;
-        // });
-        this.dataApi.getCategorias().subscribe((categoria:any)=>{
-            this.categorias=categoria;             
+        this.dataApi.getAllempleados().subscribe((fisioterapeutas:any)=>{
+          this.fisioterapeutas= fisioterapeutas;
         }); 
+        this.dataApi.getAllpacientes().subscribe((pacientes:any)=>{
+          this.pacientes= pacientes;
+        });
+        this.dataApi.getCategorias().subscribe((categoria:any)=>{
+          this.categorias=categoria;             
+        }); 
+        this.getListClientes(null);
+        this.getListEmpleados(null);
     };
-    // tipoProd(){
-    //     this.dataApi.getProductos(this.categoriafiltro).subscribe((productos:any)=>{
-    //         this.productos=productos;
-    //         console.log(this.productos);
-    //     })
-    //     this.dataApi.getAllfichaClinicas("","","","","").subscribe((fichaClinica: fichaClinicaInterface) => {
-    //         this.fichaClinica = fichaClinica;        } );
-    // }
+     tipoProd(){
+         this.dataApi.getProductos(this.categoriafiltro).subscribe((productos:any)=>{
+             this.productos=productos;
+             console.log(this.productos);
+         })
+         /*this.dataApi.getAllfichaClinicas("","","","","").subscribe((fichaClinica: fichaClinicaInterface) => {
+             this.fichaClinica = fichaClinica;        } );*/
+     }
    
     
     getLisServicio() {
@@ -116,8 +125,12 @@ export class ReporteComponent implements OnInit {
         var a =this.desdefiltro.split("-");
         this.desde =a[0]+a[1]+a[2];
         var a =this.hastafiltro.split("-");
-        this.hasta=a[0]+a[1]+a[2];
-        this.getLisServicio();   
+        this.hasta=a[0]+a[1]+a[2];        
+        this.dataApi.getserviciosFiltro(this.desde,this.hasta,this.pacientefiltro,this.fisioterapeutafiltro,this.productofiltro).subscribe((servicios: any) => {
+          this.servicios = servicios.lista;  
+          console.log("Filtro");          
+      } );
+           
     }
     limpiar(){
         this.desdefiltro="2019-01-01";
@@ -174,5 +187,52 @@ export class ReporteComponent implements OnInit {
         )
       });
     }
+    getListEmpleadosFiltrado(buscarEmpleadoText){
+      var filtro=$('input:radio[name=filtroEmpleado]:checked').val();
+      this.dataApi.getEmpleadosFiltrado(filtro, buscarEmpleadoText.value).subscribe(empleados => {
+        this.empleados = empleados;
+        console.log("empleados", empleados);
+        console.log("this.empleados", this.empleados);
+    } );    
+      console.log("filtro", filtro);
+      console.log("buscarClienteText", buscarEmpleadoText.value);
+    }
+    getListClientesFiltrado(buscarClienteText){
+      var filtro=$('input:radio[name=filtroCliente]:checked').val();
+      this.dataApi.getClientesFiltrado(filtro, buscarClienteText.value).subscribe(clientes => {
+        this.clientes = clientes;
+        console.log("clientes", clientes);
+        console.log("this.clientes", this.clientes);
+    } );
+      
+      console.log("filtro", filtro);
+      console.log("buscarClienteText", buscarClienteText.value);
+    }
+    getListClientes(buscarClienteText) {
+      this.dataApi.getAllpersonas().subscribe(clientes => {
+          this.clientes = clientes;    
+      } );
+    }
+    selectChangeHandlerEmpleado(empleado: any){
+      //this.clienteSelect = event.target.value;    
+      this.empleadoSelect = empleado;
+    }
+    selectChangeHandler(cliente: any){
+      //this.clienteSelect = event.target.value;
+      this.clienteSelect = cliente;
+    }
+    getListEmpleados(buscarEmpleadoText) {
+      this.dataApi.getAllpersonas().subscribe(empleados => {
+          this.empleados = empleados;
+      } );
+    }
+  seleccionarEmpleado(){        
+      this.nombreEmpleado = this.empleados.lista[0].nombre + ' ' +this.empleados.lista[0].apellido;    
+      this.fisioterapeutafiltro=this.empleados.lista[0].idPersona;    
+  }
+  seleccionarCliente(){
+      this.nombreCliente= this.clientes.lista[0].nombre + ' ' +this.clientes.lista[0].apellido;
+      this.pacientefiltro=this.clientes.lista[0].idPersona;               
+  }
 
 }

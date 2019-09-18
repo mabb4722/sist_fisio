@@ -120,5 +120,69 @@ export class DataApiService {
     let headers = new HttpHeaders().set('usuario', 'pedro');
     return this.http.get(url_api_get_presentacion,{headers,params});
   }
+  ///////////////////////////Agregado por Alejandro////////////////////////////////
+  getAllempleados() {
+    let params = new HttpParams().set('ejemplo',JSON.stringify({"soloUsuariosDelSistema":true}))
+    const url_api_get_fichaClinica = '/stock-pwfe/persona';
+    return this.http.get(url_api_get_fichaClinica,{params:params});
+  }
+  getAllpacientes() {
+    let params = new HttpParams().set('ejemplo',JSON.stringify({"soloUsuariosDelSistema":false}))
+    const url_api_get_fichaClinica = '/stock-pwfe/persona';
+    return this.http.get(url_api_get_fichaClinica,{params:params});
+  }
+  getProductos(categoria){
+    let params;
+    params = new HttpParams().set('ejemplo',JSON.stringify({idCategoria:{idCategoria: categoria}}));
+    const url_api_get_producto = '/stock-pwfe/tipoProducto';
+    return this.http.get(url_api_get_producto,{params:params});
+  }
+  getserviciosFiltro(desdefiltro,hastafiltro,pacientefiltro,fisiofiltro,subcategoria) {   
+    let params;
+    var dat = {fechaDesdeCadena:desdefiltro,fechaHastaCadena:hastafiltro,
+               idFichaClinica:{idCliente:{idPersona:pacientefiltro},idTipoProducto:{idTipoProducto:subcategoria}},               
+               idEmpleado:{idPersona:fisiofiltro}}            
+    params = new HttpParams().set('ejemplo',JSON.stringify(dat))
+    const url_api_get_servicio = '/stock-pwfe/servicio';
+    return this.http.get(url_api_get_servicio,{params});
+  }
+  getEmpleadosFiltrado(filtro, buscarEmpleadoText){
+    const url_api = '/stock-pwfe/persona';
+    let params;
+    if (filtro && buscarEmpleadoText){
+      if (filtro == "cedula"){
+        params = new HttpParams().set('ejemplo', JSON.stringify({cedula:buscarEmpleadoText}));
+      } else if (filtro == "nombre"){
+        params = new HttpParams().set('ejemplo', JSON.stringify({nombre:buscarEmpleadoText}));
+      } else {
+        params = new HttpParams().set('ejemplo', JSON.stringify({apellido:buscarEmpleadoText}));
+      }
+    }
+      const headers = new HttpHeaders ({
+        'Content-Type': 'application/json'
+      });
+    return this.http.get(url_api, {params: params, headers: headers});
+   }
+   getClientesFiltrado(filtro, buscarClienteText){
+    const url_api = '/stock-pwfe/persona';
+    let params;
+    if (filtro && buscarClienteText){
+      if (filtro == "cedula"){
+        params = new HttpParams().set('ejemplo', JSON.stringify({cedula:buscarClienteText}));
+      } else if (filtro == "nombre"){
+        params = new HttpParams().set('ejemplo', JSON.stringify({nombre:buscarClienteText}));
+      } else {
+        params = new HttpParams().set('ejemplo', JSON.stringify({apellido:buscarClienteText}));
+      }
+    }
+      const headers = new HttpHeaders ({
+        'Content-Type': 'application/json'
+      });
+    return this.http.get(url_api, {params: params, headers: headers});
+   }
+   getAllpersonas() {
+    const url_api_get_fichaClinica = '/stock-pwfe/persona';
+    return this.http.get(url_api_get_fichaClinica);
+   }
   
 }

@@ -17,7 +17,7 @@
                       Exportar Excel
                   </button>
                 </div>
-                <!-- <div>  
+                <div>  
                     <div class="row">
                       <div class="col-md-6 mr-auto">                          
                         <div class="col-10">
@@ -31,27 +31,25 @@
                             <input class="form-control" [(ngModel)]=hastafiltro type="date" value="2011-08-19" id="fechahasta">
                           </div>
                       </div>                        
-                    </div>
-                    <div class="row">                     
-                      <div class="col-md-6 mr-auto">                                 
-                        <div class="col-10">
-                          <label for="fisio">Empleado</label>
-                          <select id="fisio" name ="fisio" [(ngModel)]=fisioterapeutafiltro class="form-control" *ngIf="fisioterapeutas">
-                            <option selected="true" value="">Todos</option>
-                            <option *ngFor="let row of fisioterapeutas.lista" value={{row.idPersona}}>{{row.nombre}} {{row.apellido}}</option>
-                          </select>  
-                        </div>
-                      </div>  
-                      <div class="col-md-6 mr-auto">                                                                         
-                        <div class="col-10">
-                          <label for="paciente">Cliente</label>
-                          <select id="paciente" name ="paciente" [(ngModel)]=pacientefiltro class="form-control" *ngIf="pacientes">
-                            <option selected="true" value="">Todos</option>
-                            <option *ngFor="let row of pacientes.lista" value={{row.idPersona}}>{{row.nombre}} {{row.apellido}}</option>
-                          </select>  
+                    </div>                                                            
+                    <div class="row">
+                      <div class="col-md-6 mr-auto">
+                          <div class="col-10">
+                              <div class="input-group no-border" style="border-bottom: solid 1px gray;">
+                                  <input id="empleadoSelect" [(ngModel)]= nombreEmpleado #empleado type="text" value="" class="form-control" placeholder="Empleado" style="background: none;" readonly>    
+                                  <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer;" data-toggle="modal" data-target="#modalEmpleado">search</i>
+                              </div>
+                          </div>
+                      </div>
+                    <div class="col-md-6 mr-auto">
+                      <div class="col-10">
+                        <div class="input-group no-border" style="border-bottom: solid 1px gray;">
+                            <input id="clienteSelect" [(ngModel)]= nombreCliente #cliente type="text" value="" class="form-control" placeholder="Cliente" style="background: none;" readonly>    
+                            <i class="material-icons"  style="font-size: 20px; line-height: 2; color: gray;cursor: pointer;" data-toggle="modal" data-target="#modalCliente">search</i>
                         </div>
                       </div>
-                    </div>   
+                    </div>
+                  </div>  
                     <div class="row">
                         <div class="col-md-6 mr-auto">                                     
                             <div class="col-10">
@@ -76,7 +74,7 @@
                         <button mat-raised-button type="button" (click)=filtrar() class="btn btn-fill btn-rose">Buscar</button>
                         <button mat-raised-button type="button" (click)=limpiar() class="btn btn-fill btn-rose">Limpiar</button>
                     </div>              
-                </div> -->
+                </div> 
                   <div class="card-body">
                       <div class="table-responsive">
                           <table class="table" id="tabl_reporte_extend">
@@ -116,6 +114,134 @@
           </div>
         </div>
     </div>
+    <!---------------------------------------------------------------------------------------------------------------------------------------
+  -----------------------------------------------------Seleccionar Empleado Modal------------------------------------------------------
+  --------------------------------------------------------------------------------------------------------------------------------------->
+  <div class="modal fade" id="modalEmpleado" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Seleccionar empleado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; align-items: baseline;justify-content: space-between;">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="filtroEmpleado" value="cedula" checked> Cédula
+                            <span class="circle">
+                                <span class="check"></span>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="filtroEmpleado" value="nombre"> Nombre
+                        <span class="circle">
+                            <span class="check"></span>
+                        </span>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="filtroEmpleado" value="apellido"> Apellido
+                        <span class="circle">
+                            <span class="check"></span>
+                        </span>
+                        </label>
+                    </div>                                                    
+                </div>
+                <div style="display: flex; align-items: center;justify-content: space-between;">
+                    <mat-form-field class="example-full-width">
+                        <input id="buscarClienteText" #buscarEmpleadoText matInput placeholder="Buscar...">
+                    </mat-form-field>
+                    <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListEmpleadosFiltrado(buscarEmpleadoText)">search</i>
+                </div>
+                <br />
+                <div style="display: flex; align-items: center;justify-content: space-between;">                      
+                        <select  placeholder="Seleccione el fisioterapeuta" (selectionChange)="selectChangeHandlerEmpleado($event.value)" class="form-control" *ngIf="empleados">                            
+                          <option *ngFor="let empleado of empleados.lista" value=empleado>
+                              {{ empleado.nombre }} {{ empleado.apellido }} - CI: {{ empleado.cedula }}
+                          </option>
+                        </select>    
+                    <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListEmpleados(buscarEmpleadoText)">close</i>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" (click)="seleccionarEmpleado()" data-dismiss="modal">Seleccionar</button>
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+<!---------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------Seleccionar Cliente Modal------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------->
+
+
+<div class="modal fade" id="modalCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Seleccionar cliente</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <div style="display: flex; align-items: baseline;justify-content: space-between;">
+                  <div class="form-check">
+                      <label class="form-check-label">
+                          <input class="form-check-input" type="radio" name="filtroCliente" value="cedula" checked> Cédula
+                          <span class="circle">
+                              <span class="check"></span>
+                          </span>
+                      </label>
+                  </div>
+                  <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="filtroCliente" value="nombre"> Nombre
+                            <span class="circle">
+                              <span class="check"></span>
+                            </span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="radio" name="filtroCliente" value="apellido"> Apellido
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>                                                    
+              </div>
+              <div style="display: flex; align-items: center;justify-content: space-between;">
+                  <mat-form-field class="example-full-width">
+                      <input id="buscarClienteText" #buscarClienteText matInput placeholder="Buscar...">
+                  </mat-form-field>
+                  <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListClientesFiltrado(buscarClienteText)">search</i>
+              </div>
+              <br />
+              <div style="display: flex; align-items: center;justify-content: space-between;">                      
+                  <select  placeholder="Seleccione el fisioterapeuta" (selectionChange)="selectChangeHandler($event.value)" class="form-control" *ngIf="clientes">                            
+                    <option *ngFor="let cliente of clientes.lista" value=cliente>
+                        {{ cliente.nombre }} {{ cliente.apellido }} - CI: {{ cliente.cedula }}
+                    </option>
+                  </select>    
+              <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListEmpleados(buscarEmpleadoText)">close</i>
+          </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary" (click)="seleccionarCliente()" data-dismiss="modal">Seleccionar</button>
+          </div>
+      </div>
+  </div>
+</div>   
   
    
   
