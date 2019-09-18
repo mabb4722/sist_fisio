@@ -8,11 +8,15 @@ export const AppRoutes: Routes = [
       path: '',
       redirectTo: 'pages/login',
       pathMatch: 'full',
-    }, {
+    }, 
+    {
       path: '',
       component: AdminLayoutComponent,
       children: [
-          {
+        {
+            path: 'reservas',
+            loadChildren: './reservas/reservas.module#ReservasModule'
+        },{
         path: '',
         loadChildren: './dashboard/dashboard.module#DashboardModule'
      },{

@@ -92,6 +92,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                         this.loginExitoso = true;
                         localStorage.setItem('usuario', usuarioWeb.nombreCompleto);
                         localStorage.setItem('loginExitoso','true');
+                        localStorage.setItem('usuarioWeb', usuarioWeb.idPersona);
                         this._router.navigate(['dashboard']);
                         swal(
                             {
