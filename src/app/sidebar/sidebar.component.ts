@@ -34,7 +34,7 @@ export const ROUTES: RouteInfo[] = [
         path: '/presentacion-producto',
         title: 'Presentación Productos',
         type: 'sub',
-        icontype: 'event_note',
+        icontype: 'shop_two',
         collapse: 'presentacion-producto',
         children: [
             {path: 'agregar', title: 'Agregar', ab:'APP'},
@@ -55,7 +55,7 @@ export const ROUTES: RouteInfo[] = [
         path: '/reservas',
         title: 'Reservas',
         type: 'sub',
-        icontype: 'event_note',
+        icontype: 'date_range',
         collapse: 'reservas',
         children: [
             {path: 'list', title: 'Reservas', ab:'R'},
@@ -169,7 +169,7 @@ export const ROUTES: RouteInfo[] = [
         path: '/reportes',
         title: 'Reportes',
         type: 'sub',
-        icontype: 'description',
+        icontype: 'print',
         collapse: 'reportes',
         children: [
             {path: 'reporte_resumido', title: 'Reporte Resumido', ab: 'RS'},
