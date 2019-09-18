@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import { APP_BASE_HREF } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ExportAsModule } from 'ngx-export-as';
 import { CommonModule } from '@angular/common';
 import {
   MatAutocompleteModule,
@@ -83,7 +84,8 @@ import {DataApiService} from './services/data-api.service';
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    ExportAsModule
   ],
 })
 export class MaterialModule {}

@@ -104,4 +104,11 @@ export class DataApiService {
     const params = new HttpParams().set('ejemplo',JSON.stringify({soloUsuariosDelSistema:false}));
     return this.http.get(url,{params:params});
   }
+
+  getAllServiciosReporte(){
+    // let params = new HttpParams().set('ejemplo',JSON.stringify({"idFichaClinica":{"idFichaClinica":ficha}}))
+    const url_api_get_servicio = '/stock-pwfe/servicio';
+    return this.http.get(url_api_get_servicio);
+  }
+  
 }
