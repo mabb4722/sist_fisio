@@ -2,6 +2,14 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type':  'application/json', 
+    'usuario' :'pedro'
+  })
+};
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,6 +19,39 @@ export class DataApiService {
   getAllCategorias(filtros:any) {
     const url_api_get_categoria = '/stock-pwfe/categoria?orderBy='+filtros.orderBy+'&orderDir='+filtros.orderDir+'&inicio='+filtros.inicio+'&cantidad='+filtros.cantidad;
     return this.http.get(url_api_get_categoria);
+  }
+  getAlltipoProducto() {
+    const url_api_get_fichaClinica = '/stock-pwfe/tipoProducto';
+    return this.http.get(url_api_get_fichaClinica);
+  }
+  modificarfichaClinica(obs,fila){
+    const url_api_put_fichaClinica = '/stock-pwfe/fichaClinica';
+    return this.http.put(url_api_put_fichaClinica,
+      {
+        "idFichaClinica":fila.idFichaClinica,
+        "observacion":obs
+      },httpOptions
+      );  
+  }
+  addfichaClinicas (diagnostico,motivo,observacion,fisioterapeuta,
+    paciente, tipoProducto){
+    let params = null;
+    const url_api_post_fichaClinica = '/stock-pwfe/fichaClinica';
+    return this.http.post<any>(url_api_post_fichaClinica, 
+      {
+        "motivoConsulta": motivo,
+        "diagnostico":diagnostico,
+        "observacion":observacion,
+        "idEmpleado":{
+          "idPersona":fisioterapeuta
+        },
+        "idCliente":{
+          "idPersona":paciente
+        },
+        "idTipoProducto": {      
+          "idTipoProducto":tipoProducto   
+        }
+      },httpOptions);
   }
   addCategoria (categoria: any): Observable<any> {
     const url_api_post_categoria = '/stock-pwfe/categoria';
@@ -95,6 +136,12 @@ export class DataApiService {
     const params = new HttpParams().set('ejemplo',JSON.stringify({soloUsuariosDelSistema:true}));
     return this.http.get(url_usuarios,{params:params});
   }
+
+  getUsuarioByID(id){
+    const url_usuarios = 'stock-pwfe/persona/' + id;
+    return this.http.get(url_usuarios);
+  }
+
   getTotalReservas(){
     const url= 'stock-pwfe/reserva';
     return this.http.get(url);
@@ -179,8 +226,17 @@ deleteReserva(aEditar){
   const url_api = '/stock-pwfe/reserva/' + aEditar.idReserva;
   return this.http.delete(url_api);
 }
+asistioConFicha(idReserva){
+  const url_api = '/stock-pwfe/reserva/';
+  var objParams:any = {};
+  objParams.idReserva = idReserva;
+  objParams.flagAsistio = 'S';
+  const headers = new HttpHeaders ({
+    'Content-Type': 'application/json'
+  });
+  return this.http.put(url_api, JSON.stringify(objParams), {headers: headers});
+}
 
- //falta verificar si es cliente
  getClientes(){
   const url_api = '/stock-pwfe/persona';
   return this.http.get(url_api);
@@ -229,7 +285,6 @@ deleteReserva(aEditar){
   return this.http.post(url_api, JSON.stringify(objParams), {headers: headers});
  }
 
- //falta verificar si es empleado
  getEmpleados(){
   const url_api = '/stock-pwfe/persona';
   let params = new HttpParams().set('ejemplo', JSON.stringify({soloUsuariosDelSistema:'true'}));;

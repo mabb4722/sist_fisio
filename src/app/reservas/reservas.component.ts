@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { DataApiService } from '../services/data-api.service';
+import swal from 'sweetalert2';
 
 declare interface DataTable {
   headerRow: string[];
@@ -29,6 +30,27 @@ export class ReservasComponent implements OnInit, AfterViewInit {
   aEditar: any = null;
   fechaDeHoy: any = null;
   table : any;
+  fechaDesdeCadenaReserva : any = null;
+  fechaHastaCadenaReserva : any = null;
+  reservaFichaAsistio : any = null;
+
+  // FICHA
+  desdefiltro="2019-01-01";
+  putObservacion=false;
+  fisioterapeutafiltro="";
+  // pacientes: any;
+  categoriacarga="";
+  categorias:any;
+  tipoProducto= 2;
+  tipoProductos: any;
+  motivo= '';
+  diagnostico= '';
+  observacion= '';
+  fila:any;
+  paciente = 1;
+  fisioterapeuta=1;
+  nombreClienteFicha = "";
+  nombreEmpleadoFicha = "";
 
   ngOnInit() {
     console.log('init reservas');
@@ -44,6 +66,8 @@ export class ReservasComponent implements OnInit, AfterViewInit {
       var yyyy = today.getFullYear();
 
       this.fechaDeHoy = yyyy + '-' +  mm + '-' + dd;
+      this.fechaDesdeCadenaReserva = yyyy+mm+dd;
+      this.fechaHastaCadenaReserva = yyyy+mm+dd;
       
     }  
     
@@ -112,6 +136,8 @@ getListReservasFiltrado(fechaDesde, fechaHasta) {
     $('#fechaAlert').removeClass('collapse');
   } else {
     this.dataApi.getReservasFiltrado(fechaDesdeCadena, fechaHastaCadena, this.empleadoSelect, this.clienteSelect).subscribe(reservas => {
+        this.fechaDesdeCadenaReserva = fechaDesdeCadena;
+        this.fechaHastaCadenaReserva = fechaHastaCadena;
         this.reservas = reservas;
         //$("#tableResevas").load(location.href + " #tableResevas");
         this.ngOnInit();
@@ -130,43 +156,79 @@ editarDescripcion(row){
 }
 
 editarRes(){
-  this.mostrandoActual = "";
+  //this.mostrandoActual = "";
   var observacionEditada = <HTMLInputElement>document.getElementById('observacionEditada');
   this.dataApi.putObservacionReserva(observacionEditada.value, this.aEditar).subscribe(reservas => {
-    this.dataApi.getReservasFiltrado(null, null, null, null).subscribe(reservas => {
+    this.dataApi.getReservasFiltrado(this.fechaDesdeCadenaReserva, this.fechaHastaCadenaReserva, this.empleadoSelect, this.clienteSelect).subscribe(reservas => {
       this.reservas = reservas;
       this.ngOnInit();
   });
+  swal(
+    {
+      title: 'Reserva Editada!',
+      text: 'Has editado la descripción de la reserva',
+      type: 'success',
+      confirmButtonClass: "btn btn-success",
+      buttonsStyling: false
+    }
+  )
   });
 }
 
 asistio(){
-  this.mostrandoActual = "";
+  // this.mostrandoActual = "";
   this.dataApi.putAsistio(true, this.aEditar).subscribe(reservas => {
-    this.dataApi.getReservasFiltrado(null, null, null, null).subscribe(reservas => {
+    this.dataApi.getReservasFiltrado(this.fechaDesdeCadenaReserva, this.fechaHastaCadenaReserva, this.empleadoSelect, this.clienteSelect).subscribe(reservas => {
       this.reservas = reservas;
       this.ngOnInit();
   });
+  swal(
+    {
+      title: 'Reserva marcada como Asistida!',
+      text: 'Has editado la reserva',
+      type: 'success',
+      confirmButtonClass: "btn btn-success",
+      buttonsStyling: false
+    }
+  )
   });
 }
 
 noAsistio(){
-  this.mostrandoActual = "";
+  // this.mostrandoActual = "";
   this.dataApi.putAsistio(false, this.aEditar).subscribe(reservas => {
-    this.dataApi.getReservasFiltrado(null, null, null, null).subscribe(reservas => {
+    this.dataApi.getReservasFiltrado(this.fechaDesdeCadenaReserva, this.fechaHastaCadenaReserva, this.empleadoSelect, this.clienteSelect).subscribe(reservas => {
       this.reservas = reservas;
       this.ngOnInit();
   });
+  swal(
+    {
+      title: 'Reserva marcada como No Asistida!',
+      text: 'Has editado la reserva',
+      type: 'success',
+      confirmButtonClass: "btn btn-success",
+      buttonsStyling: false
+    }
+  )
   });
 }
 
 cancelar(){
-  this.mostrandoActual = "";
+  // this.mostrandoActual = "";
   this.dataApi.deleteReserva(this.aEditar).subscribe(reservas => {
-    this.dataApi.getReservasFiltrado(null, null, null, null).subscribe(reservas => {
+    this.dataApi.getReservasFiltrado(this.fechaDesdeCadenaReserva, this.fechaHastaCadenaReserva, this.empleadoSelect, this.clienteSelect).subscribe(reservas => {
       this.reservas = reservas;
       this.ngOnInit();
   });
+  swal(
+    {
+      title: 'Reserva marcada como Cancelada!',
+      text: 'Has cancelado la reserva',
+      type: 'success',
+      confirmButtonClass: "btn btn-success",
+      buttonsStyling: false
+    }
+  )
   });
 }
 
@@ -247,6 +309,66 @@ selectChangeHandlerEmpleado(empleado: any){
   console.log("select empleado ", empleado);
   this.empleadoSelect = empleado;
 }
+
+//FICHA
+clickAgregarFicha(idPaciente,idEmpleado, reserva, nombreClienteFicha, nombreEmpleadoFicha){
+  console.log("nombreClienteFicha", nombreClienteFicha);
+  this.nombreClienteFicha = nombreClienteFicha;
+  this.nombreEmpleadoFicha = nombreEmpleadoFicha;
+  this.dataApi.getCategorias().subscribe((categoria:any)=>{
+      this.categorias=categoria;             
+  });
+  /*this.dataApi.getAllpersonas().subscribe((pacientes:any)=>{
+      this.pacientes= pacientes;
+  });*/
+  this.dataApi.getAlltipoProducto().subscribe((tipoProducto:any)=>{
+      this.tipoProductos=tipoProducto;
+  }); 
+  this.putObservacion=false;
+  if(idEmpleado)this.fisioterapeuta = idEmpleado;
+  else this.fisioterapeuta=1;
+  if (idPaciente) this.paciente = idPaciente;
+  else this.paciente = 1;
+  this.categoriacarga="";
+  this.tipoProducto= 2;
+  this.motivo= '';
+  this.diagnostico= '';
+  this.observacion= '';
+  this.reservaFichaAsistio = reserva;
+}
+sumar() {       
+  if(this.putObservacion){
+      this.dataApi.modificarfichaClinica(this.observacion,this.fila).subscribe(
+          data=>{
+              console.log(data);                
+          }); 
+  }else{
+      // this.mostrandoActual = "";
+      this.dataApi.addfichaClinicas(this.diagnostico,this.motivo,this.observacion,this.fisioterapeuta,
+          this.paciente, this.tipoProducto).subscribe(
+          data  => {
+              console.log('POST Request is successful ', data);  
+
+              this.dataApi.asistioConFicha(this.reservaFichaAsistio).subscribe(
+                reservas => {
+                  this.dataApi.getReservasFiltrado(this.fechaDesdeCadenaReserva, this.fechaHastaCadenaReserva, this.empleadoSelect, this.clienteSelect).subscribe(reservas => {
+                    this.reservas = reservas;
+                    this.ngOnInit();
+                  }); 
+                  swal(
+                    {
+                      title: 'Ficha Creada y Reserva marcada como asistida!',
+                      text: 'Ficha creada',
+                      type: 'success',
+                      confirmButtonClass: "btn btn-success",
+                      buttonsStyling: false
+                    }
+                  )             
+                });              
+          }); 
+  }                          
+}
+
 
 ngAfterViewInit() {
     //if (this.reservas && !this.bandera ){

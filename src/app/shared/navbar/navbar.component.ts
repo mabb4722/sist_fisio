@@ -215,6 +215,7 @@ export class NavbarComponent implements OnInit {
     logout(){
         localStorage.setItem('loginExitoso','false');
         localStorage.setItem('usuario', null);
+        localStorage.setItem('usuarioWeb', null);
         // this.router.navigate(['pages/login']);
             swal({
                 title: 'Sesión cerrada!',

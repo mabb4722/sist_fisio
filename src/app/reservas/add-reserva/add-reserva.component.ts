@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataApiService } from '../../services/data-api.service';
+import swal from 'sweetalert2';
 
 declare const $: any;
 
@@ -18,10 +19,12 @@ export class AddReservaComponent implements OnInit {
   agendas: any = null;
   reservadosChecked: any = false; 
   fechaSelected: any;
+  first: any = true;
 
   constructor(private dataApi: DataApiService) { }
 
   ngOnInit() {
+    if(this.first) this.seleccionarEmpleadoLogueado();
     this.getListEmpleados(null);
     this.getListClientes(null);
     //this.getListAgendas('20190915', 'S', 4);
@@ -41,12 +44,21 @@ export class AddReservaComponent implements OnInit {
     //console.log("AGENDA SELECCIONADA", agenda);
     //console.log("AGENDA fechaCadena", agenda.fechaCadena);
     var observacion = <HTMLInputElement>document.getElementById('observacion');
-    if (this.clienteSelect){
+    if (this.clienteSelect && this.agendaChoose){
     this.dataApi.postReserva(this.agendaChoose.fechaCadena, this.agendaChoose.horaInicioCadena, this.agendaChoose.horaFinCadena, this.agendaChoose.idEmpleado.idPersona, this.clienteSelect.idPersona, observacion.value).subscribe(agendas => {
       this.getAgendas(this.fechaSelected);
+      swal(
+        {
+          title: 'Reserva Creada!',
+          text: '',
+          type: 'success',
+          confirmButtonClass: "btn btn-success",
+          buttonsStyling: false
+        }
+      )
     } );
     } else {
-      alert("Seleccione un cliente.");
+      alert("Seleccione un cliente y una agenda.");
     }
   }
 
@@ -89,6 +101,14 @@ export class AddReservaComponent implements OnInit {
   seleccionarEmpleado(event){
     var empleadoSelect = <HTMLInputElement>document.getElementById('empleadoSelect');
     empleadoSelect.value = this.empleadoSelect.nombre + ' ' + this.empleadoSelect.apellido;
+  }
+
+  seleccionarEmpleadoLogueado(){
+    var empleadoSelect = <HTMLInputElement>document.getElementById('empleadoSelect');
+    empleadoSelect.value = localStorage.getItem('usuario');
+    this.dataApi.getUsuarioByID(localStorage.getItem('usuarioWeb')).subscribe(usuarios => {
+      this.empleadoSelect = usuarios;
+    });
   }
 
   seleccionarCliente(event){
