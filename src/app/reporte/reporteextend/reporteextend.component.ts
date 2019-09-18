@@ -46,9 +46,10 @@ export class ReporteextendComponent implements OnInit {
     fisioterapeutafiltrodetalle="";
     pacientefiltrodetalle="";
     precio=0;   
-    detalle={idDetalle:'',presentacion:'',precioUnitario:0,cantidad:0,total:0};    
+    // detalle={idDetalle:'',presentacion:'',precioUnitario:0,cantidad:0,total:0};    
     detalleArray= new Array();
     response:any;
+    detalle={fechaHora:'', fisioterapeuta:'',paciente:'',precioUnitario:0,cantidad:0,total:0}; 
     ngOnInit() {    
         this.getLisServicio();  
         // this.dataApi.getAllempleados().subscribe((fisioterapeutas:any)=>{
@@ -76,6 +77,10 @@ export class ReporteextendComponent implements OnInit {
         console.log(response);
         this.response = response;
         this.servicios = this.response.lista;
+        this.detalleArray.length = 0;       
+            for (let servicio of this.servicios) {
+                this.getdetalleServicio(servicio);           
+            } 
         
       });
         // console.log(this.productofiltro);
@@ -87,28 +92,27 @@ export class ReporteextendComponent implements OnInit {
         //     this.presentacionProductos=presentacion;
         // })             
     }; 
-    getdetalleServicio(){        
-        // this.dataApi.getallDetalleServicio(this.servicio).subscribe(detalleServicios=>{            
-        //     this.detalleServicios = detalleServicios;
-        //     this.detalleArray.length = 0;            
-        //     for (let detalle of this.detalleServicios) {                
-        //         this.detalle.idDetalle=detalle.idServicioDetalle;
-        //         this.detalle.presentacion=detalle.idPresentacionProducto.nombre;
-        //         this.presentacion=detalle.idPresentacionProducto.idPresentacionProducto;
-        //         this.precioPresentacion();                
-        //         this.detalle.precioUnitario=this.precio;
-        //         this.detalle.cantidad = detalle.cantidad;
-        //         this.detalle.total=this.detalle.precioUnitario * this.detalle.cantidad;
-        //         this.detalleArray.push(this.detalle);
-        //         this.detalle={idDetalle:'',presentacion:'',precioUnitario:0,cantidad:0,total:0};
-        //     }   
-        //     console.log(this.detalleArray);         
-        // })        
+    getdetalleServicio(servicio){        
+      this.dataApi.getallDetalleServicio(servicio.idServicio).subscribe(detalleServicios=>{            
+        this.detalleServicios = detalleServicios;                 
+        for (let detalle of this.detalleServicios) { 
+            this.detalle.fechaHora=servicio.fechaHora;
+            this.detalle.fisioterapeuta=servicio.idEmpleado.nombre+' '+servicio.idEmpleado.apellido;
+            this.detalle.paciente=servicio.idFichaClinica.idCliente.nombre+' '+servicio.idFichaClinica.idCliente.apellido;
+            this.precioPresentacion();                
+            this.detalle.precioUnitario=this.precio;
+            this.detalle.cantidad = detalle.cantidad;
+            this.detalle.total=this.detalle.precioUnitario * this.detalle.cantidad;
+            this.detalleArray.push(this.detalle);
+            this.detalle={fechaHora:'', fisioterapeuta:'',paciente:'',precioUnitario:0,cantidad:0,total:0};
+        }   
+        console.log(this.detalleArray);         
+    })           
     }     
     cargarfila(row){
         this.fila=row;
         this.servicio = this.fila.idServicio;
-        this.getdetalleServicio();
+        this.getdetalleServicio(this.servicio);
     }
    
     filtrar(){
@@ -156,6 +160,17 @@ export class ReporteextendComponent implements OnInit {
       this.exportAsService.save(exportAsConfigxls, 'ReporteExtendido').subscribe(() => {
         // save started
       });
+    }
+      
+     
+    
+
+    
+    precioPresentacion(){
+        this.dataApi.getpresentacionprecio(this.presentacion).subscribe(data=>{
+            var pre:any=data;
+            this.precio=pre.lista[0].precioVenta;
+        })
     }
 
 
