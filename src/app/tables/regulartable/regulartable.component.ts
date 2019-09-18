@@ -49,6 +49,8 @@ export class RegularTableComponent implements OnInit {
     agregarFichaEmpCl=false;
     nombreEmpleado2="";
     nombreCliente2="";
+    clientepro="";
+    empleadopro="";
     ngOnInit() {    
         this.getLisServicio();  
         this.dataApi.getAllempleados().subscribe((fisioterapeutas:any)=>{
@@ -204,30 +206,33 @@ export class RegularTableComponent implements OnInit {
             console.log("this.empleados", this.empleados);
         } );
       }
-    seleccionarEmpleado(){        
+    seleccionarEmpleado(){  
+        var aux = this.empleadopro.split('|');      
     if(this.agregarFichaEmpCl){        
-        this.nombreEmpleado2 = this.empleados.lista[0].nombre + ' ' +this.empleados.lista[0].apellido;   
-        this.fisioterapeutafiltrodetalle= this.empleados.lista[0].idPersona;
+        this.nombreEmpleado2 = aux[1]; 
+        this.fisioterapeutafiltrodetalle= aux[0]; 
         this.filtroDetalleFicha();
     }else{
-        this.nombreEmpleado = this.empleados.lista[0].nombre + ' ' +this.empleados.lista[0].apellido;    
-        this.fisioterapeutafiltro=this.empleados.lista[0].idPersona;
+        this.nombreEmpleado = aux[1];   
+        this.fisioterapeutafiltro=aux[0];
     }      
     }
     seleccionarCliente(){
+        var aux = this.clientepro.split('|');
+        console.log("esto",this.clientepro)
     if(this.agregarFichaEmpCl){        
-        this.nombreCliente2= this.clientes.lista[0].nombre + ' ' +this.clientes.lista[0].apellido;
-        this.pacientefiltrodetalle=this.clientes.lista[0].idPersona; 
+        this.nombreCliente2= aux[1];
+        this.pacientefiltrodetalle=aux[0];
         this.filtroDetalleFicha();
     }else{
-        this.nombreCliente= this.clientes.lista[0].nombre + ' ' +this.clientes.lista[0].apellido;
-        this.pacientefiltro=this.clientes.lista[0].idPersona; 
+        this.nombreCliente= aux[1]; 
+        this.pacientefiltro=aux[0]; 
     }                 
     }
-    funagregarFichaEmpCl(){        
+    funagregarFichaEmpCl(){               
         this.agregarFichaEmpCl=false;
     }
-    funagregarFichaEmpCl2(){
+    funagregarFichaEmpCl2(){        
         this.agregarFichaEmpCl=true;
     }
     limpiarmodal(){

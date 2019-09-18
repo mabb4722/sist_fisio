@@ -367,8 +367,8 @@
                 </div>
                 <br />
                 <div style="display: flex; align-items: center;justify-content: space-between;">                      
-                        <select  placeholder="Seleccione el fisioterapeuta" (selectionChange)="selectChangeHandlerEmpleado($event.value)" class="form-control" *ngIf="empleados">                            
-                          <option *ngFor="let empleado of empleados.lista" value=empleado>
+                        <select  placeholder="Seleccione el fisioterapeuta" [(ngModel)]=empleadopro (selectionChange)="selectChangeHandlerEmpleado($event.value)" class="form-control" *ngIf="empleados">                            
+                          <option *ngFor="let empleado of empleados.lista" value="{{empleado.idPersona}}|{{ empleado.nombre }} {{ empleado.apellido }}" value=empleado>
                               {{ empleado.nombre }} {{ empleado.apellido }} - CI: {{ empleado.cedula }}
                           </option>
                         </select>    
@@ -433,8 +433,8 @@
               </div>
               <br />
               <div style="display: flex; align-items: center;justify-content: space-between;">                      
-                  <select  placeholder="Seleccione el fisioterapeuta" (selectionChange)="selectChangeHandler($event.value)" class="form-control" *ngIf="clientes">                            
-                    <option *ngFor="let cliente of clientes.lista" value=cliente>
+                  <select  placeholder="Seleccione el fisioterapeuta" [(ngModel)]=clientepro (selectionChange)="selectChangeHandler($event.value2)" class="form-control" *ngIf="clientes">                            
+                    <option *ngFor="let cliente of clientes.lista" value="{{cliente.idPersona}}|{{ cliente.nombre }} {{ cliente.apellido }}" value2=cliente>
                         {{ cliente.nombre }} {{ cliente.apellido }} - CI: {{ cliente.cedula }}
                     </option>
                   </select>    

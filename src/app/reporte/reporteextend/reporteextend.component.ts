@@ -58,6 +58,8 @@ export class ReporteextendComponent implements OnInit {
     clientes : any;
     empleadoSelect: any;
     clienteSelect: any;
+    empleadopro="";
+    clientepro="";
     ngOnInit() {    
         this.getLisServicio();  
         this.dataApi.getAllempleados().subscribe((fisioterapeutas:any)=>{
@@ -242,12 +244,16 @@ export class ReporteextendComponent implements OnInit {
         this.empleados = empleados;
     } );
   }
-seleccionarEmpleado(){        
-    this.nombreEmpleado = this.empleados.lista[0].nombre + ' ' +this.empleados.lista[0].apellido;    
-    this.fisioterapeutafiltro=this.empleados.lista[0].idPersona;    
+seleccionarEmpleado(){  
+  var aux = this.empleadopro.split('|');      
+  this.nombreEmpleado = aux[1];   
+  this.fisioterapeutafiltro=aux[0];    
 }
 seleccionarCliente(){
-    this.nombreCliente= this.clientes.lista[0].nombre + ' ' +this.clientes.lista[0].apellido;
-    this.pacientefiltro=this.clientes.lista[0].idPersona;               
+  var aux = this.clientepro.split('|');
+  this.nombreCliente= aux[1]; 
+  this.pacientefiltro=aux[0];                 
 }
+
+
 }

@@ -51,6 +51,8 @@ export class ExtendedTableComponent implements OnInit {
     agregarFichaEmpCl=false;
     nombreEmpleado2="";
     nombreCliente2="";
+    clientepro="";
+    empleadopro="";
 
     ngOnInit() {
         this.filtrar(); 
@@ -230,23 +232,28 @@ getListEmpleadosFiltrado(buscarEmpleadoText){
         console.log("this.empleados", this.empleados);
     } );
   }
-  seleccionarEmpleado(){        
+  seleccionarEmpleado(){            
+    var aux = this.empleadopro.split('|');
     if(this.agregarFichaEmpCl){
-        this.nombreEmpleado2 = this.empleados.lista[0].nombre + ' ' +this.empleados.lista[0].apellido;   
-        this.fisioterapeuta= this.empleados.lista[0].idPersona;
+        this.nombreEmpleado2 = aux[1]; 
+        this.fisioterapeuta= parseInt(aux[0]); 
     }else{
-        this.nombreEmpleado = this.empleados.lista[0].nombre + ' ' +this.empleados.lista[0].apellido;    
-        this.fisioterapeutafiltro=this.empleados.lista[0].idPersona;
+        this.nombreEmpleado = aux[1];   
+        this.fisioterapeutafiltro=aux[0];
     }  
 
   }
-  seleccionarCliente(){
+  seleccionarCliente(){ 
+    console.log(this.clientepro);   
+    var aux = this.clientepro.split('|');
     if(this.agregarFichaEmpCl){
-        this.nombreCliente2= this.clientes.lista[0].nombre + ' ' +this.clientes.lista[0].apellido;
-        this.paciente=this.clientes.lista[0].idPersona; 
-    }else{
-        this.nombreCliente= this.clientes.lista[0].nombre + ' ' +this.clientes.lista[0].apellido;
-        this.pacientefiltro=this.clientes.lista[0].idPersona; 
+        this.nombreCliente2= aux[1];
+        this.paciente=parseInt(aux[0]); 
+    }else{        
+        this.nombreCliente= aux[1];        
+        this.pacientefiltro=aux[0];
+        console.log("Entrooo");
+        console.log(this.pacientefiltro);
     }  
            
   }
