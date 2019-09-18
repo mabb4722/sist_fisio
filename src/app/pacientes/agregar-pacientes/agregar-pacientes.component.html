@@ -1,0 +1,59 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="alert alert-danger" role="alert" id="agregar_error" style="display: none">
+          La Persona no pudo ser creada. Mensaje de error: {{agregarError}}
+          <button type="button" class="close" (click)="closeAgregarError()" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="alert alert-success" role="alert" id="agregar_success" style="display: none">
+          La Persona ha sido creada exitosamente. El Id del registro creado es: {{agregarSuccess}}
+          <button type="button" class="close" (click)="closeAgregarSuccess()" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="row">
+          <div class="col-md-8">
+              <div class="card ">
+                  <div class="card-header card-header-primary card-header-icon">
+                      <div class="card-icon">
+                          <i class="material-icons">assignment</i>
+                      </div>
+                      <h4 class="card-title">Agregar Persona</h4>
+                  </div>
+                  <div class="card-body ">
+                      <form method="#" action="#" ngNativeValidate>
+                          <mat-form-field class="example-full-width">
+                              <input matInput placeholder="Nombre" type="text" id="nombre_paciente">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Apellido" type="text" id="apellido_paciente">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Teléfono" type="text" id="telefono_paciente">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Email" type="email" id="email_paciente">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="RUC" type="text" required id="ruc_paciente">
+                          </mat-form-field>
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Cédula de Identidad" required type="text" id="cedula_paciente">
+                          </mat-form-field>
+                          <mat-form-field >
+                            <input matInput [matDatepicker]="picker" id="fecha_de_nacimiento_paciente" placeholder="Fecha de Nacimiento" (click)="picker.open()">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+                          <div class="card-footer ">
+                              <button mat-raised-button type="submit" class="btn btn-fill btn-rose" (click)="onAddCategoria()">Agregar</button>
+                              <a mat-raised-button type="submit" class="btn btn-fill btn-primary" href="#/pacientes/listar">Ir al listado</a>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

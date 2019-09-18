@@ -17,6 +17,12 @@ export const AppRoutes: Routes = [
             path: 'reservas',
             loadChildren: './reservas/reservas.module#ReservasModule'
         },{
+            path: 'presentacion-producto',
+            loadChildren: './presentacion-producto/presentacion-producto.module#PresentacionProductoModule'
+    },{
+        path: 'pacientes',
+        loadChildren: './pacientes/pacientes.module#PacientesModule'
+    },{
         path: '',
         loadChildren: './dashboard/dashboard.module#DashboardModule'
      },{
