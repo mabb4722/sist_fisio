@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
 import { DataApiService } from 'src/app/services/data-api.service';
-
+import swal from 'sweetalert2';
+declare const $: any;
 @Component({
   selector: 'app-reporteextend',
   templateUrl: './reporteextend.component.html',
@@ -13,7 +14,7 @@ export class ReporteextendComponent implements OnInit {
   detalleServicios: any;
   exportAsConfig: ExportAsConfig = {
     type: 'pdf', // the type you want to download
-    elementId: 'tabl_reporte_resumido', // the id of html/table element
+    elementId: 'tabl_reporte_extend', // the id of html/table element
     options: {
       jsPDF: {
         orientation: 'landscape'
@@ -49,7 +50,7 @@ export class ReporteextendComponent implements OnInit {
     // detalle={idDetalle:'',presentacion:'',precioUnitario:0,cantidad:0,total:0};    
     detalleArray= new Array();
     response:any;
-    detalle={fechaHora:'', fisioterapeuta:'',paciente:'',precioUnitario:0,cantidad:0,total:0}; 
+    detalle={fechaHora:'', fisioterapeuta:'',paciente:'',precioUnitario:0,cantidad:0,total:0,nombreProducto:''}; 
     ngOnInit() {    
         this.getLisServicio();  
         // this.dataApi.getAllempleados().subscribe((fisioterapeutas:any)=>{
@@ -96,6 +97,7 @@ export class ReporteextendComponent implements OnInit {
       this.dataApi.getallDetalleServicio(servicio.idServicio).subscribe(detalleServicios=>{            
         this.detalleServicios = detalleServicios;                 
         for (let detalle of this.detalleServicios) { 
+          console.log('detalle',detalle);
             this.detalle.fechaHora=servicio.fechaHora;
             this.detalle.fisioterapeuta=servicio.idEmpleado.nombre+' '+servicio.idEmpleado.apellido;
             this.detalle.paciente=servicio.idFichaClinica.idCliente.nombre+' '+servicio.idFichaClinica.idCliente.apellido;
@@ -103,8 +105,9 @@ export class ReporteextendComponent implements OnInit {
             this.detalle.precioUnitario=this.precio;
             this.detalle.cantidad = detalle.cantidad;
             this.detalle.total=this.detalle.precioUnitario * this.detalle.cantidad;
+            this.detalle.nombreProducto = detalle.idPresentacionProducto.descripcionGeneral;
             this.detalleArray.push(this.detalle);
-            this.detalle={fechaHora:'', fisioterapeuta:'',paciente:'',precioUnitario:0,cantidad:0,total:0};
+            this.detalle={fechaHora:'', fisioterapeuta:'',paciente:'',precioUnitario:0,cantidad:0,total:0,nombreProducto:''};
         }   
         console.log(this.detalleArray);         
     })           
@@ -148,7 +151,15 @@ export class ReporteextendComponent implements OnInit {
     // }    
     exportar_pdf(){
       this.exportAsService.save(this.exportAsConfig, 'ReporteExtendido').subscribe(() => {
-        // save started
+        swal(
+          {
+            title: 'Descargado!',
+            text: 'PDF Extendido descargado con éxito, revisar descargas!',
+            type: 'success',
+            confirmButtonClass: "btn btn-success",
+            buttonsStyling: false
+          }
+        )
       });
     }
     exportar_excel(){
@@ -158,7 +169,15 @@ export class ReporteextendComponent implements OnInit {
         
       }
       this.exportAsService.save(exportAsConfigxls, 'ReporteExtendido').subscribe(() => {
-        // save started
+        swal(
+          {
+            title: 'Descargado!',
+            text: 'Excel Extendido descargado con éxito, revisar descargas!',
+            type: 'success',
+            confirmButtonClass: "btn btn-success",
+            buttonsStyling: false
+          }
+        )
       });
     }
       

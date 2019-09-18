@@ -83,7 +83,7 @@
                                   <thead>
                                       <tr>
                                         <th>Fecha</th>
-                                        <th>Id ficha</th> 
+                                        <!-- <th>Id ficha</th>  -->
                                         <th>Fecha ficha</th>   
                                         <th>Fisioterapeuta</th>  
                                         <th>Paciente</th>
@@ -91,24 +91,21 @@
                                         <th>Cantidad</th>
                                         <th>Total</th> 
                                         <th>Nombre del producto</th>                                                                                                                                                                                                   
-                                        <!-- <th class="text-right">Acciones</th>                                 -->
+                                                                       
                                       </tr>
                                   </thead>
                                 <tbody  >
-                                    <tr *ngFor="let row of servicios">
+                                    <tr *ngFor="let row of detalleArray">
                                         <td>{{row.fechaHora}}</td>
-                                        <td>{{row.idFichaClinica.idFichaClinica}}</td>  
-                                        <td>{{row.idFichaClinica.fechaHora}}</td>    
-                                        <td>{{row.idEmpleado.nombre}} {{row.idEmpleado.apellido}}</td>
-                                        <td>{{row.idFichaClinica.idCliente.nombre}} {{row.idFichaClinica.idCliente.apellido}}</td>   
-                                        <td>{{row.idFichaClinica.idTipoProducto.idCategoria.descripcion}}</td>                                        
-                                        <td>{{row.idFichaClinica.idTipoProducto.descripcion}}</td>
-                                        <td>{{row.presupuesto}} </td>
-                                         <!-- <td class="td-actions text-right">
-                                          <button mat-raised-button type="button" data-toggle="modal" (click)=cargarfila(row) data-target=".bd-example-modal-lg" class="btn btn-success {{row[5]}}">
-                                            <i class="material-icons">add</i>
-                                          </button>
-                                      </td>  -->
+                                        <!-- <td>{{row.idFichaClinica.idFichaClinica}}</td>   -->
+                                        <td>{{row.fechaHora}}</td>    
+                                        <td>{{row.fisioterapeuta}}</td>
+                                        <td>{{row.paciente}}</td>   
+                                        <td> {{row.precioUnitario}} </td>                                        
+                                        <td>{{row.cantidad}} </td>
+                                        <td> {{row.total}} </td>
+                                        <td>{{row.nombreProducto}} </td>
+                                        
                                     </tr>
                                     
                                 </tbody>

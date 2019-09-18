@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataApiService } from '../services/data-api.service';
 import { Router } from '@angular/router';
 import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-reporte',
@@ -144,7 +145,15 @@ export class ReporteComponent implements OnInit {
     // }    
     exportar_pdf(){
       this.exportAsService.save(this.exportAsConfig, 'ReporteResumido').subscribe(() => {
-        // save started
+        swal(
+          {
+            title: 'Descargado!',
+            text: 'PDF Resumido descargado con éxito, revisar descargas!',
+            type: 'success',
+            confirmButtonClass: "btn btn-success",
+            buttonsStyling: false
+          }
+        )
       });
     }
     exportar_excel(){
@@ -154,7 +163,15 @@ export class ReporteComponent implements OnInit {
         
       }
       this.exportAsService.save(exportAsConfigxls, 'ReporteResumido').subscribe(() => {
-        // save started
+        swal(
+          {
+            title: 'Descargado!',
+            text: 'Excel Resumido descargado con éxito, revisar descargas!',
+            type: 'success',
+            confirmButtonClass: "btn btn-success",
+            buttonsStyling: false
+          }
+        )
       });
     }
 
