@@ -6,6 +6,8 @@ import { APP_BASE_HREF } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExportAsModule } from 'ngx-export-as';
 import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
+
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -52,6 +54,8 @@ import { AuthLayoutComponent } from './layouts/auth/auth-layout.component';
 import { AppRoutes } from './app.routing';
 import {DataApiService} from './services/data-api.service';
 // import { ReservasComponent } from './reservas/reservas.component';
+import { PresentacionProductoComponent } from './presentacion-producto/presentacion-producto.component';
+//import { PacientesComponent } from './pacientes/pacientes.component';
 
 @NgModule({
   exports: [
@@ -88,12 +92,14 @@ import {DataApiService} from './services/data-api.service';
     MatTooltipModule,
     ExportAsModule
   ],
+  //declarations: [PresentacionProductoComponent, PacientesComponent]
 })
 export class MaterialModule {}
 
 @NgModule({
     imports:      [
         CommonModule,
+        BrowserModule,
         BrowserAnimationsModule,
         FormsModule,
         RouterModule.forRoot(AppRoutes,{

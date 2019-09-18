@@ -31,6 +31,27 @@ export const ROUTES: RouteInfo[] = [
         icontype: 'dashboard'
     },
     {
+        path: '/presentacion-producto',
+        title: 'Presentación Productos',
+        type: 'sub',
+        icontype: 'event_note',
+        collapse: 'presentacion-producto',
+        children: [
+            {path: 'agregar', title: 'Agregar', ab:'APP'},
+            {path: 'listar', title: 'Listar', ab:'LPP'}
+        ]
+    },{
+        path: '/pacientes',
+        title: 'Pacientes',
+        type: 'sub',
+        icontype: 'event_note',
+        collapse: 'pacientes',
+        children: [
+            {path: 'agregar', title: 'Agregar', ab:'AP'},
+            {path: 'listar', title: 'Listar', ab:'LP'}
+        ]
+    },
+    {
         path: '/reservas',
         title: 'Reservas',
         type: 'sub',
