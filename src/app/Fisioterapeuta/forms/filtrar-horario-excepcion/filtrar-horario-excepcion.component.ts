@@ -12,8 +12,8 @@ declare var $: any;
 
 export class FiltrarHorarioExcepcionComponent implements OnInit {
 
-  limit = ['1', '2', '3', '4', '5', '6', '7', '10', '15', '20'];
-  ordencampo = [{ key: 'Empleado', value: 'empleado' }, { key: 'Fecha', value: 'idHorarioExcepcion'}, 
+  limit = ['5', '10', '15', '20','30'];
+  ordencampo = [{ key: 'Empleado', value: 'idEmpleado' }, { key: 'Fecha', value: 'idHorarioExcepcion'}, 
                 {key: 'default', value: 'idHorarioExcepcion'}];
   orden = [{ key: 'Ascendente', value: 'asc' }, { key: 'Descendente', value: 'desc'}];
 

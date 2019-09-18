@@ -135,7 +135,12 @@ cargarFisioterapeutaSistema(all?: String) {
            type: 'success'
        // tslint:disable-next-line: deprecation
          }).catch(swal.noop);
-       });
+       }, (error) => {
+        console.log(error);
+        swal({title:'Horario Excepcion',
+              text:error.error,
+        type:'error'})
+      });
 
 
 

@@ -130,6 +130,7 @@ cargarFisioterapeutaExcepcion(result?: any) {
           horarioFisio['idEmpleado'] = c.idEmpleado.idPersona;
           horarioFisio['nombrelocal'] = c['idLocal'].nombre;
           horarioFisio['flagEsHabilitar'] = c.flagEsHabilitar;
+          horarioFisio['intervaloMinutos'] = c.intervaloMinutos;
           const fecha = c.fechaCadena;
           horarioFisio['fecha'] = fecha.substr(0, 4) + '-' + fecha.substr(4, 2) + '-' + fecha.substr(6, 2);
           const horahc = c.horaCierreCadena;

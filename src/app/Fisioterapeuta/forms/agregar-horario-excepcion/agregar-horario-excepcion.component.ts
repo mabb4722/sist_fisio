@@ -29,8 +29,12 @@ export class AgregarHorarioExcepcionComponent implements OnInit {
   @Output() queryEvent = new EventEmitter<Object>();
   @Input()
   public set editarHorario(update) {
+ 
     this.putfisio = false;
     if (update !== undefined) {
+      const nper=this.listEmpleado.find(x => x.value == update['idEmpleado']);
+      this.valorpersona=nper.key;
+
       this.putfisio = true;
       this.formAtencionForm = new FormGroup({
         idEmpleado: new FormGroup({
@@ -48,8 +52,7 @@ export class AgregarHorarioExcepcionComponent implements OnInit {
   }
 
 
-
-
+ 
 
 
 
@@ -88,7 +91,7 @@ export class AgregarHorarioExcepcionComponent implements OnInit {
 
 
   closemodalFisio() {
-    this.valorpersona = 'funciona';
+    this.valorpersona = '';
     $('#upload-avatar').modal('toggle');
   }
 

@@ -31,11 +31,14 @@ export class AgregarHorarioAtencionComponent implements OnInit {
   public set editarHorario(update) {
     this.putfisio = false;
     if (update !== undefined) {
+      const nper=this.listEmpleado.find(x => x.value == update['idEmpleado']);
+      this.valorpersona=nper.key;
+
       this.putfisio = true;
       const diasemana = this.semanas.find( sm => sm.key === update.diaCadena);
       this.formAtencionForm = new FormGroup({
         idEmpleado: new FormGroup({
-          idPersona: new FormControl({value: update['idEmpleado']}, [Validators.required])
+          idPersona: new FormControl(update['idEmpleado'], [Validators.required])
         }),
        dia: new FormControl(diasemana.value, [Validators.required]),
        horaAperturaCadena: new FormControl(update.horaApertura, [Validators.required]),
@@ -83,12 +86,15 @@ export class AgregarHorarioAtencionComponent implements OnInit {
 
     if (this.formAtencionForm.valid) {
       const formvalues = this.formAtencionForm.value;
+      
 
       formvalues['horaAperturaCadena'] = formvalues['horaAperturaCadena'].substr(0, 2) + formvalues['horaAperturaCadena'].substr(3, 2);
       formvalues['horaCierreCadena'] = formvalues['horaCierreCadena'].substr(0, 2) + formvalues['horaCierreCadena'].substr(3, 2);
     this.queryEvent.emit(this.formAtencionForm.value);
     }
     $('#exampleModal').modal('hide');
+    this.revert();
+    
   }
 
 
