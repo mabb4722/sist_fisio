@@ -3,9 +3,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import { APP_BASE_HREF } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import {NgxPaginationModule} from 'ngx-pagination';
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ExportAsModule } from 'ngx-export-as';
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
+
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -53,6 +58,10 @@ import { AppRoutes } from './app.routing';
 import {DataApiService} from './services/data-api.service';
 import { ServiciosResumidoComponent } from './Reportes/servicios-resumido/servicios-resumido.component';
 import { ServiciosDetalladoComponent } from './Reportes/servicios-detallado/servicios-detallado.component';
+// import { ReservasComponent } from './reservas/reservas.component';
+import { PresentacionProductoComponent } from './presentacion-producto/presentacion-producto.component';
+//import { PacientesComponent } from './pacientes/pacientes.component';
+
 
 @NgModule({
   exports: [
@@ -87,15 +96,20 @@ import { ServiciosDetalladoComponent } from './Reportes/servicios-detallado/serv
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-	NgxPaginationModule
+  NgxPaginationModule,
+  ExportAsModule
   ],
   declarations: [ServiciosResumidoComponent, ServiciosDetalladoComponent]
+  
+  //declarations: [PresentacionProductoComponent, PacientesComponent]
+
 })
 export class MaterialModule {}
 
 @NgModule({
     imports:      [
         CommonModule,
+        BrowserModule,
         BrowserAnimationsModule,
         FormsModule,
         RouterModule.forRoot(AppRoutes,{

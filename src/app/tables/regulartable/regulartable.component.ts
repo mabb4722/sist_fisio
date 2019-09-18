@@ -54,10 +54,10 @@ export class RegularTableComponent implements OnInit {
            }; */
     }
     getListCategorias() {
-        this.dataApi.getAllCategorias().subscribe(categorias => {
-            this.categorias = categorias;
-            console.log("categorias", categorias);
-            console.log("this.categorias", this.categorias.totalDatos);
-        } );
+        // this.dataApi.getAllCategorias().subscribe(categorias => {
+        //     this.categorias = categorias;
+        //     console.log("categorias", categorias);
+        //     console.log("this.categorias", this.categorias.totalDatos);
+        // } );
     }
 }

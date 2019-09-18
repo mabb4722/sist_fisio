@@ -1,0 +1,461 @@
+<div class="main-content">
+    <div class="alert alert-warning collapse" id="fechaAlert">
+        <button mat-button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="material-icons">close</i>
+        </button>
+        <span>
+            <b> Alerta - </b> Inserte <b>Fecha desde</b> anterior o igual a la <b>Fecha hasta</b>.</span>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header card-header-primary card-header-icon">
+                    <div class="card-icon">
+                      <i class="material-icons">event_note</i>
+                    </div>
+                    <h4 class="card-title">Reservas</h4>
+                  </div>
+                    <div class="card-body">
+                        <div class="toolbar">
+                            <!-- Modal Empleado -->
+                            <div class="modal fade" id="modalEmpleado" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Seleccionar empleado</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div style="display: flex; align-items: baseline;justify-content: space-between;">
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="radio" name="filtroEmpleado" value="cedula" checked> Cédula
+                                                            <span class="circle">
+                                                                <span class="check"></span>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                        <input class="form-check-input" type="radio" name="filtroEmpleado" value="nombre"> Nombre
+                                                        <span class="circle">
+                                                            <span class="check"></span>
+                                                        </span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                        <input class="form-check-input" type="radio" name="filtroEmpleado" value="apellido"> Apellido
+                                                        <span class="circle">
+                                                            <span class="check"></span>
+                                                        </span>
+                                                        </label>
+                                                    </div>                                                    
+                                                </div>
+                                                <div style="display: flex; align-items: center;justify-content: space-between;">
+                                                    <mat-form-field class="example-full-width">
+                                                        <input id="buscarClienteText" #buscarEmpleadoText matInput placeholder="Buscar...">
+                                                    </mat-form-field>
+                                                    <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListEmpleadosFiltrado(buscarEmpleadoText)">search</i>
+                                                </div>
+                                                <br />
+                                                <div style="display: flex; align-items: center;justify-content: space-between;">
+                                                    <mat-form-field >
+                                                        <mat-select placeholder="Seleccione el fisioterapeuta" (selectionChange)="selectChangeHandlerEmpleado($event.value)" >
+                                                            <mat-option *ngFor="let empleado of empleados.lista" [value]="empleado" >
+                                                                {{ empleado.nombre }} {{ empleado.apellido }} - CI: {{ empleado.cedula }}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                    <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListEmpleados(buscarEmpleadoText)">close</i>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                <button type="button" class="btn btn-primary" (click)="seleccionarEmpleado(empleado.value)" data-dismiss="modal">Seleccionar</button>
+                                            </div>
+                                        </div>
+                                    </div> 
+                            </div>
+                            <!-- Modal Cliente -->
+                            <div class="modal fade" id="modalCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Seleccionar cliente</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div style="display: flex; align-items: baseline;justify-content: space-between;">
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="radio" name="filtroCliente" value="cedula" checked> Cédula
+                                                            <span class="circle">
+                                                                <span class="check"></span>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                            <label class="form-check-label">
+                                                              <input class="form-check-input" type="radio" name="filtroCliente" value="nombre"> Nombre
+                                                              <span class="circle">
+                                                                <span class="check"></span>
+                                                              </span>
+                                                            </label>
+                                                          </div>
+                                                          <div class="form-check">
+                                                                <label class="form-check-label">
+                                                                  <input class="form-check-input" type="radio" name="filtroCliente" value="apellido"> Apellido
+                                                                  <span class="circle">
+                                                                    <span class="check"></span>
+                                                                  </span>
+                                                                </label>
+                                                              </div>                                                    
+                                                </div>
+                                                <div style="display: flex; align-items: center;justify-content: space-between;">
+                                                    <mat-form-field class="example-full-width">
+                                                        <input id="buscarClienteText" #buscarClienteText matInput placeholder="Buscar...">
+                                                    </mat-form-field>
+                                                    <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListClientesFiltrado(buscarClienteText)">search</i>
+                                                </div>
+                                                <br />
+                                                <div style="display: flex; align-items: center;justify-content: space-between;">
+                                                    <mat-form-field >
+                                                        <mat-select placeholder="Seleccione el cliente" (selectionChange)="selectChangeHandler($event.value)" >
+                                                            <!-- <mat-option [value]=null></mat-option> -->
+                                                            <mat-option *ngFor="let cliente of clientes.lista" [value]="cliente" >
+                                                                {{ cliente.nombre }} {{ cliente.apellido }} - CI: {{ cliente.cedula }}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                    <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListClientes(buscarClienteText)">close</i>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                <button type="button" class="btn btn-primary" (click)="seleccionarCliente(cliente.value)" data-dismiss="modal">Seleccionar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <!-- Modal Editar Observacion-->
+                            <div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Editar observación</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div *ngIf="aEditar">
+                                                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: solid 1px lightgray; margin-bottom: 10px;">
+                                                    <h4>Cliente: </h4>{{ aEditar.idCliente.nombre }} {{ aEditar.idCliente.apellido }}
+                                                </div>
+                                                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: solid 1px lightgray; margin-bottom: 10px;">
+                                                    <h4>Empleado: </h4>{{ aEditar.idEmpleado.nombre }} {{ aEditar.idEmpleado.apellido }}
+                                                </div>
+                                                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: solid 1px lightgray; margin-bottom: 10px;">
+                                                    <h4>Fecha: </h4>{{ aEditar.fecha }}
+                                                </div>
+                                                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: solid 1px lightgray; margin-bottom: 10px;">
+                                                    <h4>Hora Inicio: </h4>{{ aEditar.horaInicio }}
+                                                </div>
+                                                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: solid 1px lightgray; margin-bottom: 10px;">
+                                                    <h4>Hora Fin: </h4>{{ aEditar.Fin }}
+                                                </div>
+                                                <br />
+                                                <mat-form-field class="example-full-width">
+                                                    <input #observacionEditada id="observacionEditada" matInput placeholder="Observación..." value="{{ aEditar.observacion }}">
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="editarRes()">Guardar observación</button>
+                                        </div>
+                                    </div>
+                                </div>  
+                            </div>
+                            <!-- Modal Asistió -->
+                            <div class="modal fade" id="modalAsistio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">¿Marcar reserva como asistida?</h5>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="asistio()">OK</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal NO Asistió -->
+                            <div class="modal fade" id="modalNoAsistio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">¿Marcar reserva como NO asistida?</h5>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="noAsistio()">OK</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <!-- Modal Cancelar -->
+                            <div class="modal fade" id="modalCancelar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">¿Cancelar la reserva?</h5>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="cancelar()">Sí</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+
+
+
+                            <!-- AGREGAR RESERVA 
+                            <div class="modal fade" id="modalAgregar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Agregar Reserva</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                <div class="modal-body">
+                                    <div style="display: flex">
+                                        <div class="col-md-6 mr-auto">
+                                            <mat-form-field >
+                                                <input id="fechaAddReserva"  #fechaAddReserva matInput [matDatepicker]="picker3" placeholder="Fecha:" (click)="picker3.open()">
+                                                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                                                <mat-datepicker #picker3></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-6 mr-auto">
+                                            <div class="form-check">
+                                                <label class="form-check-label">
+                                                    <input class="form-check-input" type="checkbox" value=""> Mostrar ya reservados
+                                                    <span class="form-check-sign">
+                                                        <span class="check"></span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-primary">Agregar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                    <!-- MODAL FICHA CLINICA -->
+                    <div class="modal fade" id="fichaClinicaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Ficha Clinica</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body"> 
+                                    <div class="row"> 
+                                      <div class="col-md-6 mr-auto">                          
+                                        <div class="col-10">
+                                          <label for="fechadesde">Fecha</label>
+                                          <input class="form-control" type="date" [(ngModel)]=desdefiltro value="2011-08-19" id="fechadesde" [disabled]=putObservacion>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">                    
+                                      <div class="col-md-6 mr-auto">   
+                                        <!-- <label for="fisioterapeuta">Empleado</label>         
+                                        <select id="fisioterapeuta" name ="fisioterapeuta" [(ngModel)]=fisioterapeuta class="form-control" *ngIf="pacientes" [disabled]=putObservacion>
+                                        <option *ngFor="let row of pacientes.lista" value={{row.idPersona}}>{{row.nombre}} {{row.apellido}}</option>
+                                        </select>      -->
+                                        <h5>Empleado: {{nombreEmpleadoFicha}}</h5>
+                                      </div>
+                                      <div class="col-md-6 mr-auto"> 
+                                        <!-- <label for="paciente">Cliente:</label>         
+                                        <select id="paciente" name ="paciente" [(ngModel)]=paciente class="form-control" *ngIf="pacientes" [disabled]=putObservacion>
+                                        <option *ngFor="let row of pacientes.lista" value={{row.idPersona}}>{{row.nombre}} {{row.apellido}}</option>
+                                        </select>    -->
+                                        <h5>Cliente: {{nombreClienteFicha}}</h5>
+                                      </div> 
+                                    </div>  
+                                    <div class="row">   
+                                      <div class="col-md-6 mr-auto">                                                         
+                                        <label for="catego" >Categoria</label>
+                                        <select id="catego" name ="catego" [(ngModel)]=categoriacarga class="form-control" *ngIf="categorias" (change)= tipoProd() [disabled]=putObservacion>
+                                          <option selected="true" value="">Todos</option>
+                                          <option *ngFor="let row of categorias.lista" value={{row.idCategoria}}>{{row.descripcion}}</option>
+                                        </select>                      
+                                      </div> 
+                                      <div class="col-md-6 mr-auto">
+                                        <label for="tipoProducto">Subcategoria</label>         
+                                        <select id="tipoProducto" name ="tipoProducto" [(ngModel)]=tipoProducto class="form-control" *ngIf="tipoProductos" [disabled]=putObservacion>
+                                        <option *ngFor="let row of tipoProductos.lista" value={{row.idTipoProducto}}>{{row.descripcion}}</option>
+                                        </select>
+                                      </div>    
+                                    </div>
+                                    <div class="row">  
+                                      <div class="col-md-6 mr-auto">
+                                        <label for="motivo">Motivo</label>                             
+                                        <textarea class="form-control" rows="2" id="motivo" name ="motivo" [(ngModel)]="motivo" [disabled]=putObservacion ></textarea>
+                                      </div>
+                                      <div class="col-md-6 mr-auto">
+                                        <label for="diagnostico">Diagnóstico</label>                  
+                                        <textarea class="form-control" rows="2" id="diagnostico" name ="diagnostico" [(ngModel)]="diagnostico" [disabled]=putObservacion ></textarea>
+                                      </div>
+                                    </div>
+                                    <mat-form-field>
+                                        <input matInput [(ngModel)]="observacion" type="text" placeholder="Ingrese la Observación">
+                                    </mat-form-field>                                                  
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                  <button type="button" class="btn btn-primary" (click)="sumar()" data-dismiss="modal">Guardar</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>      
+                    
+
+
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                            <div class="row">
+                                <div class="col-md-6 mr-auto">
+                                    <mat-form-field >
+                                    <input id="fechaDesde"  #fechaDesde matInput [matDatepicker]="picker" placeholder="Fecha desde:" (click)="picker.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6 mr-auto">
+                                    <mat-form-field >
+                                    <input id="fechaHasta" #fechaHasta matInput [matDatepicker]="picker2" placeholder="Fecha hasta:" (click)="picker2.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                    <div class="col-md-6 mr-auto">
+                                            <div class="input-group no-border" style="border-bottom: solid 1px gray;">
+                                                <input id="empleadoSelect" #empleado type="text" value="" class="form-control" placeholder="Empleado" style="background: none;" readonly>    
+                                                <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer;" data-toggle="modal" data-target="#modalEmpleado">search</i>
+                                            </div>
+                                        </div>
+                                <div class="col-md-6 mr-auto">
+                                    <div class="input-group no-border" style="border-bottom: solid 1px gray;">
+                                        <input id="clienteSelect" #cliente type="text" value="" class="form-control" placeholder="Cliente" style="background: none;" readonly>    
+                                        <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer;" data-toggle="modal" data-target="#modalCliente">search</i>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div style="display: flex; justify-content: flex-end;">
+                                    <button mat-raised-button class="btn btn-fill btn-rose" (click)="getListReservasFiltrado(fechaDesde, fechaHasta)">Buscar</button>
+                                    <button mat-raised-button class="btn btn-fill btn-rose" (click)="limpiar()">Limpiar</button>
+                            </div>
+                        </div>
+                        <div>{{ mostrandoActual }}</div>
+                        <div #tableResevas class="material-datatables">
+                          <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                                <thead>
+                                    <tr>
+                                      <th>{{ dataTable.headerRow[0] }}</th>
+                                      <th>{{ dataTable.headerRow[1] }}</th>
+                                      <th>{{ dataTable.headerRow[2] }}</th>
+                                      <th>{{ dataTable.headerRow[3] }}</th>
+                                      <th>{{ dataTable.headerRow[4] }}</th>
+                                      <th>{{ dataTable.headerRow[5] }}</th>
+                                      <th>{{ dataTable.headerRow[6] }}</th>
+                                      <th>{{ dataTable.headerRow[7] }}</th>
+                                      <th style="text-align: right">Acciones</th>
+                                      <!-- <th class="disabled-sorting text-right">{{ dataTable.headerRow[5] }}</th> -->
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                      <th>{{ dataTable.footerRow[0] }}</th>
+                                      <th>{{ dataTable.footerRow[1] }}</th>
+                                      <th>{{ dataTable.footerRow[2] }}</th>
+                                      <th>{{ dataTable.footerRow[3] }}</th>
+                                      <th>{{ dataTable.footerRow[4] }}</th>
+                                      <th>{{ dataTable.footerRow[5] }}</th>
+                                      <th>{{ dataTable.footerRow[6] }}</th>
+                                      <th>{{ dataTable.footerRow[7] }}</th>
+                                      <th style="text-align: right">Acciones</th>
+                                      <!-- <th class="text-right">{{ dataTable.footerRow[5] }}</th> -->
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr *ngIf="reservas.lista.length == 0">
+                                        <td colspan="7" style="text-align: center;">Nada que mostrar, intente una nueva búsqueda</td>
+                                    </tr>
+                                    <tr *ngFor="let row of reservas.lista">
+                                        <td>{{row.fecha}}</td>
+                                        <td>{{row.horaInicio}}</td>
+                                        <td>{{row.horaFin}}</td>
+                                        <td>{{row.idEmpleado.nombreCompleto}}</td>
+                                        <td>{{row.idCliente.nombreCompleto}}</td>
+                                        <td>{{row.observacion}}</td>
+                                        <td *ngIf="row.flagAsistio !== null">{{row.flagAsistio}}</td>
+                                        <td *ngIf="row.flagAsistio === null || (row.fecha >= fechaDeHoy && row.flagAsistio === null && row.flagEstado !== 'C')"><a (click)="editarDescripcion(row)" href="javascript:void(0)" *ngIf="row.fecha >= fechaDeHoy && row.flagAsistio === null && row.flagEstado !== 'C'" data-toggle="modal" data-target="#modalAsistio">Asistió</a><br /><a (click)="editarDescripcion(row)" href="javascript:void(0)" *ngIf="row.fecha >= fechaDeHoy && row.flagAsistio === null && row.flagEstado !== 'C'" data-toggle="modal" data-target="#modalNoAsistio">No asistió</a></td>
+                                        <td>{{row.flagEstado}}</td>
+                                        <td class="text-center" *ngIf="row.fecha >= fechaDeHoy && row.flagAsistio === null && row.flagEstado !== 'C';else other_content">
+                                          <!--
+                                          <div *ngIf="row.flagAsistio; else elseBlock">
+                                            <a href="javascript:void(0" class="btn btn-link btn-success btn-just-icon edit"><i class="material-icons">check_box</i></a>
+                                          </div>
+                                          <ng-template #elseBlock>
+                                            <a href="javascript:void(0" class="btn btn-link btn-success btn-just-icon edit"><i class="material-icons">check_box_outline_blank</i></a>
+                                          </ng-template>
+                                          -->
+                                          <a href="javascript:void(0)" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons" data-toggle="modal" data-target="#modalCancelar" (click)="editarDescripcion(row)">close</i></a><br />
+                                          <a href="javascript:void(0)" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons" data-toggle="modal" data-target="#modalEditar" (click)="editarDescripcion(row)">edit</i></a><br />
+                                          <a href="javascript:void(0)" class="btn btn-link" (click)=clickAgregarFicha(row.idCliente.idPersona,row.idEmpleado.idPersona,row.idReserva,row.idCliente.nombreCompleto,row.idEmpleado.nombreCompleto) data-toggle="modal" data-target="#fichaClinicaModal">Nueva ficha</a>
+                                        </td>
+                                        <ng-template #other_content>
+                                            <td class="text-right">
+                                                La reserva ya no puede ser modificada.
+                                            </td>
+                                        </ng-template>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                            <div style="display: flex; justify-content: flex-end;">
+                                <button mat-raised-button type="submit" class="btn btn-fill btn-rose" (click)="goToAdd()">Agregar reserva</button>
+                            </div>
+                    </div>
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>

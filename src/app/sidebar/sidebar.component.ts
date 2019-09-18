@@ -22,6 +22,12 @@ export interface ChildrenItems {
 
 //Menu Items
 export const ROUTES: RouteInfo[] = [{
+
+    path: '/dashboard',
+    title: 'Dashboard',
+    type: 'link',
+    icontype: 'dashboard'
+},{
     path: '/fisioterapeuta',
     title: 'Fisioterapeuta',
     type: 'sub',
@@ -31,12 +37,40 @@ export const ROUTES: RouteInfo[] = [{
         {path: 'atencion', title: 'Horario Atención', ab:'A'},
         {path: 'excepcion', title: 'Horario Excepción', ab:'E'},
         ]
+    },
+    {
+        path: '/presentacion-producto',
+        title: 'Presentación Productos',
+        type: 'sub',
+        icontype: 'event_note',
+        collapse: 'presentacion-producto',
+        children: [
+            {path: 'agregar', title: 'Agregar', ab:'APP'},
+            {path: 'listar', title: 'Listar', ab:'LPP'}
+        ]
     },{
-        path: '/dashboard',
-        title: 'Dashboard',
-        type: 'link',
-        icontype: 'dashboard'
-    },{
+        path: '/pacientes',
+        title: 'Pacientes',
+        type: 'sub',
+        icontype: 'event_note',
+        collapse: 'pacientes',
+        children: [
+            {path: 'agregar', title: 'Agregar', ab:'AP'},
+            {path: 'listar', title: 'Listar', ab:'LP'}
+        ]
+    },
+    {
+        path: '/reservas',
+        title: 'Reservas',
+        type: 'sub',
+        icontype: 'event_note',
+        collapse: 'reservas',
+        children: [
+            {path: 'list', title: 'Reservas', ab:'R'},
+            {path: 'add', title: 'Crear Reserva', ab:'CR'}
+        ]
+    },
+    {
         path: '/components',
         title: 'Components',
         type: 'sub',
@@ -115,6 +149,17 @@ export const ROUTES: RouteInfo[] = [{
             {path: 'register', title: 'Register Page', ab:'RP'},
             {path: 'lock', title: 'Lock Screen Page', ab:'LSP'},
             {path: 'user', title: 'User Page', ab:'UP'}
+        ]
+    },
+    {
+        path: '/reportes',
+        title: 'Reportes',
+        type: 'sub',
+        icontype: 'description',
+        collapse: 'reportes',
+        children: [
+            {path: 'reporte_resumido', title: 'Reporte Resumido', ab: 'RS'},
+            {path: 'reporte_extendido', title: 'Reporte Extendido', ab: 'RE'},
         ]
     }
 ];

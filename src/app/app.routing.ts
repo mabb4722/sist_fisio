@@ -9,11 +9,21 @@ export const AppRoutes: Routes = [
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',
-    }, {
+    }, 
+    {
       path: '',
       component: AdminLayoutComponent,
       children: [
-          {
+        {
+            path: 'reservas',
+            loadChildren: './reservas/reservas.module#ReservasModule'
+        },{
+            path: 'presentacion-producto',
+            loadChildren: './presentacion-producto/presentacion-producto.module#PresentacionProductoModule'
+    },{
+        path: 'pacientes',
+        loadChildren: './pacientes/pacientes.module#PacientesModule'
+    },{
         path: '',
         loadChildren: './dashboard/dashboard.module#DashboardModule'
     }, {
@@ -46,7 +56,21 @@ export const AppRoutes: Routes = [
     }, {
         path: '',
         loadChildren: './timeline/timeline.module#TimelineModule'
+    }, 
+    {
+          path: 'categorias',
+          loadChildren: './categorias/categorias.module#CategoriasModule'
+      },
+      {
+        path: 'sub_categorias',
+        loadChildren: './subcategorias/subcategorias.module#SubCategoriasModule'
+    },
+    {
+        path: 'reportes',
+        loadChildren: './reporte/reporte.module#ReporteModule'
+
     }
+
   ]}, {
       path: '',
       component: AuthLayoutComponent,

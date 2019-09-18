@@ -3,6 +3,7 @@ import { ROUTES } from '../.././sidebar/sidebar.component';
 import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import swal from 'sweetalert2';
 const misc: any = {
     navbar_menu_visible: 0,
     active_collapse: true,
@@ -210,5 +211,18 @@ export class NavbarComponent implements OnInit {
     }
     getPath() {
         return this.location.prepareExternalUrl(this.location.path());
+    }
+    logout(){
+        localStorage.setItem('loginExitoso','false');
+        localStorage.setItem('usuario', null);
+        localStorage.setItem('usuarioWeb', null);
+        // this.router.navigate(['pages/login']);
+            swal({
+                title: 'Sesión cerrada!',
+                text: 'Has cerrado sesión con éxito!',
+                type: 'success',
+                confirmButtonClass: "btn btn-success",
+                buttonsStyling: false
+              })
     }
 }
