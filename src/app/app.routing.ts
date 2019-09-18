@@ -64,6 +64,10 @@ export const AppRoutes: Routes = [
     {
         path: 'reportes',
         loadChildren: './reporte/reporte.module#ReporteModule'
+    },
+    {
+        path: 'fisioterapeuta',
+        loadChildren: './Fisioterapeuta/fisioterapeuta.module#FisioterapeutaModule'
     }
 
   ]}, {

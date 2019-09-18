@@ -173,7 +173,18 @@ export const ROUTES: RouteInfo[] = [
             {path: 'reporte_resumido', title: 'Reporte Resumido', ab: 'RS'},
             {path: 'reporte_extendido', title: 'Reporte Extendido', ab: 'RE'},
         ]
-    }
+    },
+    {
+        path: '/fisioterapeuta',
+        title: 'Fisioterapeuta',
+        type: 'sub',
+        icontype: 'local_hospital',
+        collapse: 'components',
+        children: [
+            {path: 'atencion', title: 'Horario Atención', ab:'A'},
+            {path: 'excepcion', title: 'Horario Excepción', ab:'E'},
+            ]
+        }
 ];
 @Component({
     selector: 'app-sidebar-cmp',
