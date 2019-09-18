@@ -27,7 +27,6 @@ export class DataApiService {
   }
   addPaciente (paciente: any): Observable<any> {
     const json = JSON.stringify(paciente);            
-    console.log(json);
     const url_api_post_persona = '/stock-pwfe/persona';
     return this.http.post<any>(url_api_post_persona, paciente);
   }
@@ -43,7 +42,6 @@ export class DataApiService {
 
   updatePersona(persona: any, newPersona: any): Observable<any> {
     const url_api_update_persona = '/stock-pwfe/persona';
-    console.log(persona)
     const jsonPersona = {
       "idPersona": persona.idPersona,
       "nombre": newPersona.nombre,

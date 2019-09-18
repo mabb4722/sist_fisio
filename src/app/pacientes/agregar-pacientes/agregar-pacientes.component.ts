@@ -11,29 +11,48 @@ declare const $: any;
   styleUrls: ['./agregar-pacientes.component.css']
 })
 export class AgregarPacientesComponent implements OnInit {
+  public agregarError;
+  public agregarSuccess;
   constructor(private dataApi: DataApiService, private _router: Router) { }
   ngOnInit() {
   }
   
   onAddCategoria() {
-      const fechaNacimiento=new Date($('#fecha_de_nacimiento_paciente').val()).toISOString().substring(0,10)+" 00:00:00";
-      const paciente={
+      let paciente={};
+
+      paciente={
         "nombre":  $('#nombre_paciente').val(),
         "apellido":  $('#apellido_paciente').val(),
         "email":  $('#email_paciente').val(),
         "telefono":  $('#telefono_paciente').val(),
         "ruc":  $('#ruc_paciente').val(),
         "cedula":  $('#cedula_paciente').val(),
-        "tipoPersona":  "FISICA",
-        "fechaNacimiento":  $('#fecha_de_nacimiento_paciente').val()!="" ? fechaNacimiento : ""
+        "tipoPersona":  "FISICA"      
       }
-      console.log(paciente)
+
+      if($('#fecha_de_nacimiento_paciente').val()!=""){
+        paciente={
+          ...paciente,
+          "fechaNacimiento":  new Date($('#fecha_de_nacimiento_paciente').val()).toISOString().substring(0,10)+" 00:00:00"
+        }
+      }
+
       if (paciente) {
           this.dataApi.addPaciente(paciente).subscribe(
               data  => {
-                  console.log('#/categorias/categorias_list');
-                  this._router.navigate(['/pacientes/listar']);
+                this.agregarSuccess=data.idPersona;
+                $('#agregar_success').show();
+              }, error => {this.agregarError = error
+                $('#agregar_error').show();
               });
       }
+  }
+
+  closeAgregarError(){
+    $('#agregar_error').hide();
+  }
+
+  closeAgregarSuccess(){
+    $('#agregar_success').hide();
   }
 }

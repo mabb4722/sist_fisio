@@ -30,10 +30,13 @@ export class PresentacionProductoComponent implements OnInit {
   public cantidadTotalDePresentacionProducto = 0;
   public pageSizeOptions = [5, 10, 25, 100];  
   public eliminarError;
+  public editarError;
   public eliminarID;
 
   public editarID;
   public presentacionProductoEditar;
+  public tipoProductos;
+  public tipoProductosSelect = [];
 
   private filtros = {
     orderBy: 'idPresentacionProducto',
@@ -45,6 +48,18 @@ export class PresentacionProductoComponent implements OnInit {
   constructor(private dataApi: DataApiService, private _router: Router) {}
 
   ngOnInit() {
+    this.dataApi.getTipoProducto().subscribe(tipoProductos =>{
+      this.tipoProductos = tipoProductos;
+      const array = [];
+      for (let i = 0; i < this.tipoProductos.lista.length; i++ ) {
+          array.push({
+            'idTipoProducto':this.tipoProductos.lista[i].idTipoProducto, 
+            'descripcion':this.tipoProductos.lista[i].descripcion 
+          }) ;
+       }
+       this.tipoProductosSelect = array;
+    });
+
     this.getListPresentacionProductos(this.filtros);
   }
 
@@ -60,8 +75,12 @@ export class PresentacionProductoComponent implements OnInit {
     this.getListPresentacionProductos(this.filtros);
   }
 
-  getListPresentacionProductos(filtros) {
-    this.dataApi.getAllPresentacionProducto(filtros).subscribe(presentacionProductos => {
+  filtroTipoProducto(value){
+    this.getListPresentacionProductoByIdTipoProducto(this.filtros,value);
+  }
+
+  getListPresentacionProductoByIdTipoProducto(filtros, value) {
+    this.dataApi.getPresentacionProductoByIdTipoProducto(filtros, value).subscribe(presentacionProductos => {
       this.presentacionProductos = presentacionProductos;
       this.cantidadTotalDePresentacionProducto = this.presentacionProductos.totalDatos;
 
@@ -86,6 +105,62 @@ export class PresentacionProductoComponent implements OnInit {
     });
   }
 
+  filtrarNombre(event){
+    this.getListPresentacionProductoByNombre(this.filtros, $('#filtNom').val());
+  }
+
+  getListPresentacionProductoByNombre(filtros, value) {
+    this.dataApi.getPresentacionProductoByNombre(filtros, value).subscribe(presentacionProductos => {
+      this.presentacionProductos = presentacionProductos;
+      this.cantidadTotalDePresentacionProducto = this.presentacionProductos.totalDatos;
+
+      const array = [];
+      for (let i = 0; i < this.presentacionProductos.lista.length; i++) {
+        array.push(
+          [this.presentacionProductos.lista[i].idPresentacionProducto,
+            this.presentacionProductos.lista[i].nombre,
+            this.presentacionProductos.lista[i].descripcion,
+            this.presentacionProductos.lista[i].idProducto.idProducto,
+            this.presentacionProductos.lista[i].idProducto.idTipoProducto.idTipoProducto
+          ]
+        );
+      }
+
+      this.dataTable = {
+        headerRow: ['ID', 'Nombre', 'Descripción', 'ID Producto', 'ID Tipo de Producto', 'Acciones'],
+        footerRow: ['ID', 'Nombre', 'Descripción', 'ID Producto', 'ID Tipo de Producto', 'Acciones'],
+        dataRows: array
+      };
+
+    });
+  }
+
+
+  getListPresentacionProductos(filtros) {
+    this.dataApi.getAllPresentacionProducto(filtros).subscribe(presentacionProductos => {
+      this.presentacionProductos = presentacionProductos;
+      this.cantidadTotalDePresentacionProducto = this.presentacionProductos.totalDatos;
+
+      const array = [];
+      for (let i = 0; i < this.presentacionProductos.lista.length; i++) {
+        array.push(
+          [this.presentacionProductos.lista[i].idPresentacionProducto,
+            this.presentacionProductos.lista[i].nombre,
+            this.presentacionProductos.lista[i].descripcion,
+            this.presentacionProductos.lista[i].idProducto.idProducto,
+            this.presentacionProductos.lista[i].idProducto.idTipoProducto.idTipoProducto
+          ]
+        );
+      }
+      this.dataTable = {
+        headerRow: ['ID', 'Nombre', 'Descripción', 'ID Producto', 'ID Tipo de Producto', 'Acciones'],
+        footerRow: ['ID', 'Nombre', 'Descripción', 'ID Producto', 'ID Tipo de Producto', 'Acciones'],
+        dataRows: array
+      };
+
+    });
+  }
+
   openEliminarModal(id) {
     $('#id_presentacion_producto').html(id);
     this.eliminarID = id;
@@ -97,7 +172,7 @@ export class PresentacionProductoComponent implements OnInit {
     $('#modal_eliminar_presentacion_producto').modal('hide');
     this.dataApi.deletePresentacionProducto(this.eliminarID).subscribe(data => {
         this.presentacionProductos.lista = this.presentacionProductos.lista.filter(item => item.idPresentacionProducto !== this.eliminarID);
-        $('#eliminado_exitoso').show();
+        $('#eliminar_success').show();
         this.getListPresentacionProductos(this.filtros);
         this._router.navigate(['presentacion-producto/listar']);
     },
@@ -109,6 +184,19 @@ export class PresentacionProductoComponent implements OnInit {
   closeEliminarError(){
     $('#eliminar_error').hide();
   }
+
+  closeEliminarSuccess(){
+    $('#eliminar_success').hide();
+  }
+
+  closeEditarError(){
+    $('#editar_error').hide();
+  }
+
+  closeEditarSuccess(){
+    $('#editar_success').hide();
+  }
+
 
   openModalEditar(row) {
     this.dataApi.getPresentacionProductoById(row[0]).subscribe(data => {
@@ -123,29 +211,35 @@ export class PresentacionProductoComponent implements OnInit {
     $('#modal_editar_presentacion_producto').modal('show');
 }
 
-editarPresentacionProducto() {
-    $('#modal_editar_presentacion_producto').modal('hide');
-    const presentacionProducto={
-      "codigo":  $('#codigo').val(),
-      "flagServicio":  $('#flagServicio').val(),
-      "idProducto":  {
-        "idProducto": $('#idProducto').val()
-      },
-      "nombre":  $('#nombre').val(),
-      "existenciaProducto": {
-        "precioVenta": $('#precioVenta').val()
-      }
-    }
-    this.dataApi.getPresentacionProductoById(this.editarID).subscribe(data => {
-        this.presentacionProductoEditar = data
-        if (this.presentacionProductoEditar != null) {
-            this.dataApi.updatePresentacionProducto(this.presentacionProductoEditar, presentacionProducto).subscribe(data => {
-                $('#editado_exitoso').show();
-                // $('#categoria_descripcion' + this.editarID).html(descripcion);
-                this.getListPresentacionProductos(this.filtros);
-                this._router.navigate(['presentacion-producto/listar']);
-            });
+  editarPresentacionProducto() {
+      $('#modal_editar_presentacion_producto').modal('hide');
+      const presentacionProducto={
+        "codigo":  $('#codigo').val(),
+        "flagServicio":  $('#flagServicio').val(),
+        "idProducto":  {
+          "idProducto": $('#idProducto').val()
+        },
+        "nombre":  $('#nombre').val(),
+        "existenciaProducto": {
+          "precioVenta": $('#precioVenta').val()
         }
-    });
-}
+      }
+      this.dataApi.getPresentacionProductoById(this.editarID).subscribe(data => {
+          this.presentacionProductoEditar = data
+          if (this.presentacionProductoEditar != null) {
+              this.dataApi.updatePresentacionProducto(this.presentacionProductoEditar, presentacionProducto).subscribe(data => {
+                  $('#editar_success').show();
+                  // $('#categoria_descripcion' + this.editarID).html(descripcion);
+                  this.getListPresentacionProductos(this.filtros);
+                  this._router.navigate(['presentacion-producto/listar']);
+              });
+          }
+      },
+      error => {
+        this.editarError = error;
+        $('#editar_error').show();
+        });
+  }
+
+
 }

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {DataApiService} from '../../services/presentacion-producto/data-api.service';
 import {Router} from '@angular/router';
 
+declare const $: any;
+
 
 @Component({
   selector: 'app-agregar-presentacion-producto',
@@ -11,26 +13,57 @@ import {Router} from '@angular/router';
 export class AgregarPresentacionProductoComponent implements OnInit {
 
   constructor(private dataApi: DataApiService, private _router: Router) { }
-  public agregarError
+  public agregarError;
+  public agregarSuccess;
+  public serviciosSelect = ['S', 'N'];
+  public flagServicio = "N";
+
+  public productos;
+  public productosSelect = [];
+  public IdProductoCrear;
+  public producto;
+
   ngOnInit() {
+    this.dataApi.getProductos().subscribe(productos =>{
+      this.productos = productos;
+      const array = [];
+      for (let i = 0; i < this.productos.lista.length; i++ ) {
+          array.push({
+            'idProducto':this.productos.lista[i].idProducto, 
+            'descripcion':this.productos.lista[i].descripcion 
+          }) ;
+       }
+       this.productosSelect = array;
+    });
+
   }
+
+  flagServicioChange(value){
+    this.flagServicio=value;
+  }
+
+  IdProductoChange(value){
+    this.IdProductoCrear=value;
+  }
+
 
   onAddPresentacionProducto() {
     const presentacionProducto={
       "codigo":  $('#codigo').val(),
-      "flagServicio":  $('#flagServicio').val(),
+      "flagServicio":  this.flagServicio,
       "idProducto":  {
-        "idProducto": $('#idProducto').val()
+        "idProducto": this.IdProductoCrear
       },
       "nombre":  $('#nombre').val(),
       "existenciaProducto": {
         "precioVenta": $('#precioVenta').val()
       }
     }
-    if (presentacionProducto) {
+    if (presentacionProducto.codigo && presentacionProducto.idProducto.idProducto) {
         this.dataApi.addPresentacionProducto(presentacionProducto).subscribe(
             data  => {
-                this._router.navigate(['/presentacion-producto/listar']);
+              this.agregarSuccess=data.idPresentacionProducto;
+              $('#agregar_success').show();
             },
             error => {this.agregarError = error
               $('#agregar_error').show();
@@ -40,6 +73,10 @@ export class AgregarPresentacionProductoComponent implements OnInit {
 
   closeAgregarError(){
     $('#agregar_error').hide();
+  }
+
+  closeAgregarSuccess(){
+    $('#agregar_success').hide();
   }
 
 }

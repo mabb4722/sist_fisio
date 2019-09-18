@@ -1,11 +1,33 @@
 <div class="main-content">
   <div class="container-fluid">
-      <div class="alert alert-danger" role="alert" id="eliminar_error" style="display: none">
-          La Presentación de Producto seleccionada no pudo ser eliminada. Mensaje de error: {{eliminarError}}
-          <button type="button" class="close" (click)="closeEliminarError()" data-dismiss="modal"  aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-          </button>
+    <div class="alert alert-danger" role="alert" id="eliminar_error" style="display: none">
+      La Presentación de Producto seleccionada no pudo ser eliminada. Mensaje de error: {{eliminarError}}
+      <button type="button" class="close" (click)="closeEliminarError()" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="alert alert-danger" role="alert" id="editar_error" style="display: none">
+        La Presentación de Producto seleccionada no pudo ser editada. Mensaje de error: {{editarError}}
+        <button type="button" class="close" (click)="closeEditarError()" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
+
+    <div class="alert alert-success" role="alert" id="eliminar_success" style="display: none">
+      La Presentación de Producto seleccionada ha sido eliminada.
+      <button type="button" class="close" (click)="closeEliminarSuccess()" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="alert alert-success" role="alert" id="editar_success" style="display: none">
+        La Presentación de Producto seleccionada ha sido editada.
+        <button type="button" class="close" (click)="closeEditarSuccess()" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
     <div class="row">
       <div class="col-md-12">
         <div class="card">
@@ -18,6 +40,27 @@
           <div class="card-body">
             <div class="toolbar">
               <!--        Here you can write extra buttons/actions for the toolbar              -->
+
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field>
+                    <mat-label>Filtrar por Tipo De Producto</mat-label>
+                    <mat-select (selectionChange)="filtroTipoProducto($event.value)">
+                      <mat-option>Todos los Tipo De Productos</mat-option>
+                      <mat-option *ngFor="let tipoProducto of tipoProductosSelect"
+                        [value]="tipoProducto.idTipoProducto">
+                        Desc: {{ tipoProducto.descripcion}} - Id: {{ tipoProducto.idTipoProducto}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Filtrar por Nombre" (keydown)="filtrarNombre($event)" id="filtNom">
+                  </mat-form-field>
+                </div>
+              </div>
+
             </div>
             <div class="material-datatables">
               <div class="table-responsive">
@@ -62,8 +105,8 @@
                     </tr>
                   </tbody>
                 </table>
-                <mat-paginator [length]="cantidadTotalDePresentacionProducto" [pageSize]="10" [pageSizeOptions]="pageSizeOptions"
-                  (page)="paginacion($event)">
+                <mat-paginator [length]="cantidadTotalDePresentacionProducto" [pageSize]="10"
+                  [pageSizeOptions]="pageSizeOptions" (page)="paginacion($event)">
                 </mat-paginator>
               </div>
             </div>
@@ -74,61 +117,63 @@
 
     <div class="modal" tabindex="-1" role="dialog" style="display: none" id="modal_eliminar_presentacion_producto">
       <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title">Eliminar Presentacion de Producto</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
-              <div class="modal-body">
-                  <p>Está seguro que desea eliminar a la Presenacion de Producto con Id: <span id="id_presentacion_producto"></span>? </p>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" (click)="eliminarPresentacionProducto()">Aceptar</button>
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-              </div>
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Eliminar Presentacion de Producto</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
+          <div class="modal-body">
+            <p>Está seguro que desea eliminar a la Presenacion de Producto con Id: <span
+                id="id_presentacion_producto"></span>? </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="eliminarPresentacionProducto()">Aceptar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
       </div>
-  </div>
+    </div>
 
-  
-  <div class="modal" tabindex="-1" role="dialog" style="display: none" id="modal_editar_presentacion_producto">
+
+    <div class="modal" tabindex="-1" role="dialog" style="display: none" id="modal_editar_presentacion_producto">
       <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title">Editar Presentación Producto</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
-              <div class="modal-body">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Editar Presentación Producto</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
 
-                  <mat-form-field class="example-full-width">
-                      <input matInput placeholder="Código" type="text" id="codigo">
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                    <input matInput placeholder="Servicio" type="text" id="flagServicio">
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                    <input matInput placeholder="Id del Producto" type="text" id="idProducto">
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                    <input matInput placeholder="Nombre" type="text" id="nombre">
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                    <input matInput placeholder="Precio de Venta" type="text" id="precioVenta">
-                  </mat-form-field>
-
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" (click)="editarPresentacionProducto()">Aceptar</button>
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <form method="#" action="#" ngNativeValidate>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Código" type="number" id="codigo">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Servicio" type="text" id="flagServicio">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Id del Producto" type="number" id="idProducto" required>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Nombre" type="text" id="nombre">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Precio de Venta" type="number" id="precioVenta">
+            </mat-form-field>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="editarPresentacionProducto()">Aceptar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
               </div>
           </div>
+        </div>
       </div>
-  </div>
-  <!--end modal -->
+    </div>
+    <!--end modal -->
 
   </div>
 </div>

@@ -47,15 +47,13 @@ export class DataApiService {
 
     addPaciente(paciente: any): Observable < any > {
         const json = JSON.stringify(paciente);
-        console.log(json);
         const url_api_post_persona = '/stock-pwfe/persona';
-        return this.http.post < any > (url_api_post_persona, paciente);
+        return this.http.post < any > (url_api_post_persona, paciente).catch(this.errorHandler);
     }
 
     deletePersona(idPersona: any): Observable <any> {
         const url_api_delete_persona = '/stock-pwfe/persona/' + idPersona;
-        console.log(url_api_delete_persona);
-        return this.http.delete < any > (url_api_delete_persona).catch(this.errorHandler)
+        return this.http.delete < any > (url_api_delete_persona).catch(this.errorHandler);
     }
 
     errorHandler(error: HttpErrorResponse){
@@ -69,7 +67,6 @@ export class DataApiService {
 
     updatePersona(persona: any, newPersona: any): Observable < any > {
         const url_api_update_persona = '/stock-pwfe/persona';
-        console.log(persona)
         const jsonPersona = {
             "idPersona": persona.idPersona,
             "nombre": newPersona.nombre,
@@ -93,7 +90,7 @@ export class DataApiService {
             "todosLosCampos": persona.todosLosCampos
         }
 
-        return this.http.put < any > (url_api_update_persona, jsonPersona);
+        return this.http.put < any > (url_api_update_persona, jsonPersona).catch(this.errorHandler);
     }
 
 }

@@ -18,7 +18,7 @@ export class DataApiService {
 
     getAllPresentacionProducto(filtros: any) {
         const params = new HttpParams().set('orderBy', filtros.orderBy).set('orderDir', filtros.orderDir)
-                                        .set('inicio', filtros.inicio).set('cantidad', filtros.cantidad);
+                                        .set('inicio', filtros.inicio).set('cantidad', filtros.cantidad)
         return this.http.get (this.url_api_presentacion_producto,{params: params});
     }
 
@@ -28,7 +28,6 @@ export class DataApiService {
 
     addPresentacionProducto(presentacionProducto: any): Observable < any > {
         const json = JSON.stringify(presentacionProducto);
-        console.log(json);
         return this.http.post < any > (this.url_api_presentacion_producto, presentacionProducto).catch(this.errorHandler);
     }
 
@@ -54,7 +53,73 @@ export class DataApiService {
                 "precioVenta": newPresentacionProducto.precioVenta
                 }
             }
-            console.log(jsonPresentacionProducto)
-        return this.http.put < any > (this.url_api_presentacion_producto, jsonPresentacionProducto);
+        return this.http.put < any > (this.url_api_presentacion_producto, jsonPresentacionProducto).catch(this.errorHandler);
     }
+
+    getPresentacionProductoByIdTipoProducto(filtros: any, idTipoProducto: any){
+        const json = {
+            "idProducto":{
+                "idTipoProducto": {
+                    "idTipoProducto": idTipoProducto
+                }
+            }
+        }
+        const jsonEjemplo = JSON.stringify(json);
+
+        const params = new HttpParams().set('ejemplo', jsonEjemplo).set('orderBy', filtros.orderBy)
+        .set('orderDir', filtros.orderDir).set('inicio', filtros.inicio).set('cantidad', filtros.cantidad);
+        return this.http.get (this.url_api_presentacion_producto,{params: params});
+    }
+
+    getPresentacionProductoByNombre(filtros: any, nombre: string){
+        const json={
+            "nombre": nombre
+        }
+        const jsonEjemplo = JSON.stringify(json);
+
+        const params = new HttpParams().set('ejemplo', jsonEjemplo).set("like",'S').set('orderBy', filtros.orderBy).set('orderDir', filtros.orderDir)
+        .set('inicio', filtros.inicio).set('cantidad', filtros.cantidad);
+
+        return this.http.get (this.url_api_presentacion_producto,{params: params});
+    }
+
+    getTipoProducto(){
+        const url_api_tipoProducto= '/stock-pwfe/tipoProducto';
+        const params = new HttpParams().set('orderBy', 'descripcion').set('orderDir', 'asc');
+        return this.http.get (url_api_tipoProducto, {params});
+    }
+
+    getProductos(){
+        const url_api_producto= '/stock-pwfe/producto';
+        const params = new HttpParams().set('orderBy', 'idProducto').set('orderDir', 'asc');
+        return this.http.get (url_api_producto, {params: params});
+    }
+
+    getIdProducto(idTipoProducto: any){
+        const url_api_producto = '/stock-pwfe/producto';
+        const json = {
+            "idTipoProducto": {
+                "idTipoProducto": idTipoProducto
+            }
+        }
+        const jsonEjemplo = JSON.stringify(json);
+
+        const params = new HttpParams().set('ejemplo', jsonEjemplo);
+        return this.http.get (url_api_producto, { params: params });
+    }
+
+    getPrecioVenta(idPresentacionProductoTransient: any){
+        const url_api_existenciaProducto = '/stock-pwfe/existenciaProducto';
+
+        const json = {
+            "idPresentacionProductoTransient": idPresentacionProductoTransient
+        }
+        const jsonEjemplo = JSON.stringify(json);
+
+        const params = new HttpParams().set('ejemplo', jsonEjemplo);  
+        const headers= new HttpHeaders().set('usuario', 'pedro');
+          
+        return this.http.get(url_api_existenciaProducto, { headers: headers, params: params })
+    }
+
 }

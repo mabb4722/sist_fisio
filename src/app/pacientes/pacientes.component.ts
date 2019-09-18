@@ -21,6 +21,7 @@ export class PacientesComponent implements OnInit{
     public dataTable: DataTable;
     public cantidadTotalDePersonas = 0;
     public pageSizeOptions = [5, 10, 25, 100];
+    public editarError;
 
     private filtros = {
         orderBy: 'idPersona',
@@ -75,6 +76,10 @@ export class PacientesComponent implements OnInit{
 
     closeEliminarError(){
         $('#eliminar_error').hide();
+    }
+
+    closeEliminarSuccess(){
+        $('#eliminado_exitoso').hide();
     }
 
     getListPacientes(filtros) {
@@ -148,16 +153,23 @@ export class PacientesComponent implements OnInit{
 
     editarPersona() {
         $('#modal_editar_persona').modal('hide');
-        const paciente = {
+        let paciente={};
+        paciente = {
             "nombre": $('#nombre_paciente').val(),
             "apellido": $('#apellido_paciente').val(),
             "email": $('#email_paciente').val(),
             "telefono": $('#telefono_paciente').val(),
             "ruc": $('#ruc_paciente').val(),
             "cedula": $('#cedula_paciente').val(),
-            "tipoPersona": "FISICA",
-            "fechaNacimiento": $('#fecha_de_nacimiento_paciente').val()
+            "tipoPersona": $('#tipo_paciente').val()
         }
+
+        if($('#fecha_de_nacimiento_paciente').val()!=""){
+            paciente={
+              ...paciente,
+              "fechaNacimiento":  new Date($('#fecha_de_nacimiento_paciente').val()).toISOString().substring(0,10)+" 00:00:00"
+            }
+          }
         this.dataApi.getPersonaById(this.editarID).subscribe(data => {
             this.personaEditar = data
             if (this.personaEditar != null) {
@@ -166,11 +178,23 @@ export class PacientesComponent implements OnInit{
                     // $('#categoria_descripcion' + this.editarID).html(descripcion);
                     this.getListPacientes(this.filtros);
                     this._router.navigate(['pacientes/listar']);
+                },error => {this.editarError = error
+                    $('#editar_error').show();
                 });
             }
         });
     }
+
+    closeEditarError(){
+        $('#editar_error').hide();
+    }
+
+    closeEditarSuccess(){
+        $('#editado_exitoso').hide();
+    }
 }
+
+
 
 
 
