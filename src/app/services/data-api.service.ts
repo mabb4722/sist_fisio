@@ -308,4 +308,20 @@ asistioConFicha(idReserva){
   return this.http.get(url_api, {params: params, headers: headers});
  }
 
+  getAllServiciosReporte(){
+    // let params = new HttpParams().set('ejemplo',JSON.stringify({"idFichaClinica":{"idFichaClinica":ficha}}))
+    const url_api_get_servicio = '/stock-pwfe/servicio';
+    return this.http.get(url_api_get_servicio);
+  }
+  getallDetalleServicio(servicio){
+    const url_api_get_detalle = '/stock-pwfe/servicio/'+servicio+'/detalle';
+    return this.http.get(url_api_get_detalle);
+  }
+  getpresentacionprecio(pres){
+    const url_api_get_presentacion = '/stock-pwfe/existenciaProducto';
+    let params = new HttpParams().set('ejemplo',JSON.stringify({idPresentacionProductoTransient:pres}));
+    let headers = new HttpHeaders().set('usuario', 'pedro');
+    return this.http.get(url_api_get_presentacion,{headers,params});
+  }
+  
 }

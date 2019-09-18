@@ -141,6 +141,17 @@ export const ROUTES: RouteInfo[] = [
         children: [
             {path: 'sub_categorias_list', title: 'Sub-Categorias', ab: 'SCAT'},
         ]
+    },
+    {
+        path: '/reportes',
+        title: 'Reportes',
+        type: 'sub',
+        icontype: 'description',
+        collapse: 'reportes',
+        children: [
+            {path: 'reporte_resumido', title: 'Reporte Resumido', ab: 'RS'},
+            {path: 'reporte_extendido', title: 'Reporte Extendido', ab: 'RE'},
+        ]
     }
 ];
 @Component({

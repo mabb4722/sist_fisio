@@ -54,7 +54,12 @@ export const AppRoutes: Routes = [
       {
         path: 'sub_categorias',
         loadChildren: './subcategorias/subcategorias.module#SubCategoriasModule'
+    },
+    {
+        path: 'reportes',
+        loadChildren: './reporte/reporte.module#ReporteModule'
     }
+
   ]}, {
       path: '',
       component: AuthLayoutComponent,
