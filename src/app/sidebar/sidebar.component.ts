@@ -91,14 +91,13 @@ export const ROUTES: RouteInfo[] = [
         ]
     }, {
         path: '/tables',
-        title: 'Tables',
+        title: 'Servicios/Ficha Clinica',
         type: 'sub',
         icontype: 'grid_on',
         collapse: 'tables',
         children: [
-            {path: 'regular', title: 'Regular Tables', ab: 'RT'},
-            {path: 'extended', title: 'Extended Tables', ab: 'ET'},
-            {path: 'datatables.net', title: 'Datatables.net', ab: 'DT'}
+            {path: 'regular', title: 'Servicios', ab: 'RT'},
+            {path: 'extended', title: 'Ficha Clinica', ab: 'ET'}
         ]
     }, {
         path: '/maps',
