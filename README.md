@@ -14,7 +14,7 @@ Estas instrucciones le proporcionarán una copia del proyecto en funcionamiento 
 
 ### Comandos para instalar
 
-1. Clonar de la rama sistfisio.
+1. Clonar.
 2. Ir a la raíz del proyecto y ejecutar:
 ```
 npm i
