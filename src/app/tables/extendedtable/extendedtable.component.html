@@ -1,202 +1,452 @@
 <div class="main-content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header card-header-rose card-header-icon">
-                    <div class="card-icon">
-                      <i class="material-icons">assignment</i>
-                    </div>
-                    <h4 class="card-title">Simple Table</h4>
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-rose card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">assignment</i>
                   </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                    <thead>
-                                        <tr>
-                                          <th class="text-center">{{ tableData1.headerRow[0] }}</th>
-                                          <th>{{ tableData1.headerRow[1] }}</th>
-                                          <th>{{ tableData1.headerRow[2] }}</th>
-                                          <th>{{ tableData1.headerRow[3] }}</th>
-                                          <th class="text-right">{{ tableData1.headerRow[4] }}</th>
-                                          <th class="text-right">{{ tableData1.headerRow[5] }}</th>
-                                        </tr>
-                                    </thead>
-                                  <tbody>
-                                      <tr *ngFor="let row of tableData1.dataRows">
-                                          <td class="text-center">{{row[0]}}</td>
-                                          <td>{{row[1]}}</td>
-                                          <td>{{row[2]}}</td>
-                                          <td>{{row[3]}}</td>
-                                          <td class="text-right">&euro; {{row[4]}}</td>
-                                          <td class="td-actions text-right">
-                                              <button mat-raised-button type="button" class="btn btn-info {{row[5]}}">
-                                                  <i class="material-icons">person</i>
-                                              </button>
-                                              <button mat-raised-button type="button" class="btn btn-success {{row[5]}}">
-                                                  <i class="material-icons">edit</i>
-                                              </button>
-                                              <button mat-raised-button type="button" class="btn btn-danger {{row[5]}}">
-                                                  <i class="material-icons">close</i>
-                                              </button>
-                                          </td>
-                                      </tr>
-                                  </tbody>
-                            </table>
-                        </div>
-                    </div>
+                  <h4 class="card-title">Ficha Clinica</h4>
                 </div>
-            </div>
-            <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header card-header-rose card-header-icon">
-                    <div class="card-icon">
-                      <i class="material-icons">assignment</i>
-                    </div>
-                    <h4 class="card-title">Striped Table</h4>
+                <div class="card-footer ">
+                  <button mat-raised-button type="button" class="btn btn-fill btn-rose" (click)=clickAgregarFicha() data-toggle="modal" data-target="#fichaClinicaModal">Agregar Ficha Clinica</button>
+                </div>
+                <div>  
+                  <div class="row">
+                      <div class="col-md-6 mr-auto">                          
+                        <div class="col-10">
+                          <label for="fechadesde">Fecha Desde</label>
+                          <input class="form-control" type="date" [(ngModel)]=desdefiltro value="2011-08-19" id="fechadesde">
+                        </div>
+                      </div>
+                      <div class="col-md-6 mr-auto">                            
+                          <div class="col-10">
+                            <label for="fechahasta">Fecha Hasta</label>
+                            <input class="form-control" [(ngModel)]=hastafiltro type="date" value="2011-08-19" id="fechahasta">
+                          </div>
+                      </div>                        
+                    </div>  
+                    <div class="row">
+                        <div class="col-md-6 mr-auto">
+                            <div class="col-10">
+                                <div class="input-group no-border" style="border-bottom: solid 1px gray;">
+                                    <input id="empleadoSelect" [(ngModel)]= nombreEmpleado #empleado type="text" value="" class="form-control" placeholder="Empleado" style="background: none;" readonly>    
+                                    <i class="material-icons" (click)=funagregarFichaEmpCl() style="font-size: 20px; line-height: 2; color: gray;cursor: pointer;" data-toggle="modal" data-target="#modalEmpleado">search</i>
+                                </div>
+                            </div>
+                        </div>
+                      <div class="col-md-6 mr-auto">
+                        <div class="col-10">
+                          <div class="input-group no-border" style="border-bottom: solid 1px gray;">
+                              <input id="clienteSelect" [(ngModel)]= nombreCliente #cliente type="text" value="" class="form-control" placeholder="Cliente" style="background: none;" readonly>    
+                              <i class="material-icons" (click)=funagregarFichaEmpCl() style="font-size: 20px; line-height: 2; color: gray;cursor: pointer;" data-toggle="modal" data-target="#modalCliente">search</i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>  
+                  <div class="row">
+                      <div class="col-md-6 mr-auto">                                     
+                          <div class="col-10">
+                            <label for="catego" >Categoria</label>
+                            <select id="catego" name ="catego" [(ngModel)]=categoriafiltro class="form-control" *ngIf="categorias" (change)= tipoProd()>
+                              <option selected="true" value="">Todos</option>
+                              <option *ngFor="let row of categorias.lista" value={{row.idCategoria}}>{{row.descripcion}}</option>
+                            </select>  
+                          </div>
+                      </div>
+                      <div class="col-md-6 mr-auto">                                 
+                          <div class="col-10">
+                            <label for="prod">Subcategoria</label>    
+                            <select id="prod" name ="prod" [(ngModel)]=productofiltro class="form-control" *ngIf="productos">
+                              <option selected="true" value="">Todos</option>
+                              <option *ngFor="let row of productos.lista" value={{row.idTipoProducto}}>{{row.descripcion}}</option>
+                            </select>  
+                          </div>
+                      </div>
+                  </div>  
+                                    
+                  <div class="card-footer ">
+                      <button mat-raised-button type="button" (click)=filtrar() class="btn btn-fill btn-rose">Buscar</button>
+                      <button mat-raised-button type="button" (click)=Limpiar() class="btn btn-fill btn-rose">Limpiar</button>
                   </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                          <th class="text-center">{{ tableData2.headerRow[0] }}</th>
-                                          <th>{{ tableData2.headerRow[1] }}</th>
-                                          <th>{{ tableData2.headerRow[2] }}</th>
-                                          <th>{{ tableData2.headerRow[3] }}</th>
-                                          <th>{{ tableData2.headerRow[4] }}</th>
-                                          <th class="text-right">{{ tableData2.headerRow[5] }}</th>
-                                          <th class="text-right">{{ tableData2.headerRow[6] }}</th>
-                                        </tr>
-                                    </thead>
-                                  <tbody>
-                                    <tr *ngFor="let row of tableData2.dataRows">
-                                      <td class="text-center">{{row.id}}</td>
-                                      <td>
-                                        <div [ngSwitch]="row.ischecked">
-                                            <div *ngSwitchCase="true">
-                                              <div class="form-check">
-                                                <label class="form-check-label">
-                                                  <input class="form-check-input" type="checkbox" value="" checked>
-                                                  <span class="form-check-sign">
-                                                    <span class="check"></span>
-                                                  </span>
-                                                </label>
-                                              </div>
-                                            </div>
-                                            <div *ngSwitchDefault>
-                                              <div class="form-check">
-                                                <label class="form-check-label">
-                                                  <input class="form-check-input" type="checkbox" value="">
-                                                  <span class="form-check-sign">
-                                                    <span class="check"></span>
-                                                  </span>
-                                                </label>
-                                              </div>
-                                            </div>
-                                        </div>
-                                      </td>
-                                      <td>{{row.product_name}}</td>
-                                      <td>{{row.type}}</td>
-                                      <td>{{row.quantity}}</td>
-                                      <td class="text-right">€{{ row.price }}</td>
-                                      <td class="text-right">
-                                          &euro; {{row.amount}}
+                </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                          <table class="table">
+                                  <thead>
+                                      <tr>
+                                        <th>Fecha</th>
+                                        <th>Profesional</th>
+                                        <th>Cliente</th>   
+                                        <th>Categoria</th>   
+                                        <th>Subcategoria</th>     
+                                        <th class="text-center">Acciones</th>                                
+                                      </tr>
+                                  </thead>
+                                <tbody  *ngIf="fichaClinica">
+                                    <tr *ngFor="let row of fichaClinica.lista">
+                                        <td>{{row.fechaHora}}</td>
+                                        <td>{{row.idEmpleado.nombre}} {{row.idEmpleado.apellido}}</td>
+                                        <td>{{row.idCliente.nombre}} {{row.idCliente.apellido}}</td>                                         
+                                        <td>{{row.idTipoProducto.idCategoria.descripcion}}</td>
+                                        <td>{{row.idTipoProducto.descripcion}}</td>
+                                        <td class="td-actions text-center">
+                                          <button mat-raised-button type="button" data-toggle="modal" (click)=modificarFicha(row) data-target="#fichaClinicaModal" class="btn btn-success {{row[5]}}">
+                                            <i class="material-icons">edit</i>
+                                            Editar
+                                          </button>
+                                          <button mat-raised-button type="button" (click)=cargarfila(row) data-toggle="modal" data-target="#eliminar" class="btn btn-danger {{row[5]}}">
+                                            <i class="material-icons">close</i>
+                                            Eliminar
+                                          </button>
+                                          <button mat-raised-button type="button" (click)=cargarfila(row) data-toggle="modal" data-target="#servicioModal" class="btn btn-info {{row[5]}}">
+                                            <i class="material-icons">add</i>
+                                            Crear 
+                                            Servicio
+                                          </button>
                                       </td>
                                     </tr>
-                                    <tr>
-                                        <td colspan="5"></td>
-                                        <td class="td-total">
-                                            Total
-                                        </td>
-                                        <td class="td-price">
-                                            <small>&euro;</small>12,999
-                                        </td>
-                                    </tr>
-                                  </tbody>
-                            </table>
-                        </div>
+                                </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+<!--------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------Carga Servicio--------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------->
+<div class="modal fade" id="servicioModal" tabindex="-1" role="dialog" aria-labelledby="servicioModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="servicioModalLabel">Servicio</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body"> 
+            <div class="row">
+              <div class="col-md-6 mr-auto">                          
+                <div class="col-10">
+                  <label for="fechadesde">Fecha</label>
+                  <input class="form-control" type="date" [(ngModel)]=desdefiltro value="2011-08-19" id="fechadesde">
+                </div>
+              </div>
+              <div class="col-md-6 mr-auto">                            
+                  <div class="col-10">
+                      <mat-form-field>
+                          <input matInput [(ngModel)]="observacion" type="text" placeholder="Observación">
+                      </mat-form-field> 
+                  </div>
+              </div>                        
+            </div>
+            <div class="row">                     
+                <div class="col-md-6 mr-auto">
+                  <div class="col-10">
+                    <label for="fisio">Empleado</label>
+                    <select id="fisio" name ="fisio" [(ngModel)]=empleadoServicio [disabled]="true" (change)= filtroDetalleFicha() class="form-control" *ngIf="fisioterapeutas">
+                      <option selected="true" value="">Todos</option>
+                      <option *ngFor="let row of fisioterapeutas.lista" value={{row.idPersona}}>{{row.nombre}} {{row.apellido}}</option>
+                    </select>  
+                  </div>
+                </div>  
+                <div class="col-md-6 mr-auto">                                                                         
+                  <div class="col-10">
+                    <label for="paciente">Cliente</label>
+                    <select id="paciente" name ="paciente" [(ngModel)]=clienteServicio [disabled]="true" (change)= filtroDetalleFicha()  class="form-control" *ngIf="pacientes">
+                      <option selected="true" value="">Todos</option>
+                      <option *ngFor="let row of pacientes.lista" value={{row.idPersona}}>{{row.nombre}} {{row.apellido}}</option>
+                    </select>  
+                  </div>
+                </div>
+            </div> 
+            <div class="table-responsive" id="Layer1">
+              <table class="table">
+                      <thead>
+                          <tr>
+                            <th>Id ficha</th>
+                            <th>Fecha Categoria</th>
+                            <th>Subcategoria</th>
+                            <th>Paciente</th>                                                           
+                            <th>Fisioterapeuta</th>     
+                            <th class="text-right">Acciones</th>                                
+                          </tr>
+                      </thead>
+                    <tbody  *ngIf="fichaClinicaservicio">
+                        <tr>
+                            <td>{{fichaClinicaservicio.idFichaClinica}}</td>
+                            <td>{{fichaClinicaservicio.fechaHora}}</td>
+                            <td>{{fichaClinicaservicio.idTipoProducto.descripcion}}</td>
+                            <td>{{fichaClinicaservicio.idCliente.nombre}} {{fichaClinicaservicio.idCliente.apellido}}</td>                              
+                            <td>{{fichaClinicaservicio.idEmpleado.nombre}} {{fichaClinicaservicio.idEmpleado.apellido}}</td>
+                            <td class="radio text-right">
+                              <input type="radio" value={{fichaClinicaservicio.idFichaClinica}} (click)="radiobu($event)" name="optradio" checked>
+                            </td>
+                        </tr>
+                    </tbody>
+              </table>
+          </div>                                               
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="addservicio()" data-dismiss="modal" data-toggle="modal" data-target=".bd-example-modal-lg">Guardar</button> 
+        </div>
+      </div>
+    </div>
+  </div>
+<!---------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------Carga Ficha Clinica Pop up--------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------->
+  <div class="modal fade" id="fichaClinicaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ficha Clinica</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body"> 
+              <div class="row"> 
+                <div class="col-md-6 mr-auto">                          
+                  <div class="col-10">
+                    <label for="fechadesde">Fecha</label>
+                    <input class="form-control" type="date" [(ngModel)]=desdefiltro value="2011-08-19" id="fechadesde" [disabled]=putObservacion>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-6 mr-auto">
+                      <div class="col-10">
+                          <div class="input-group no-border" style="border-bottom: solid 1px gray;">
+                              <input id="empleadoSelect"[(ngModel)]=nombreEmpleado2  #empleado type="text" value="" class="form-control" placeholder="Empleado" style="background: none;" readonly>    
+                              <i class="material-icons" (click)=funagregarFichaEmpCl2() style="font-size: 20px; line-height: 2; color: gray;cursor: pointer;" data-toggle="modal" data-target="#modalEmpleado">search</i>
+                          </div>
+                      </div>
+                  </div>
+              <div class="col-md-6 mr-auto">
+                <div class="col-10">
+                  <div class="input-group no-border" style="border-bottom: solid 1px gray;">
+                      <input id="clienteSelect" [(ngModel)]= nombreCliente2 #cliente type="text" value="" class="form-control" placeholder="Cliente" style="background: none;" readonly>    
+                      <i class="material-icons" (click)=funagregarFichaEmpCl2() style="font-size: 20px; line-height: 2; color: gray;cursor: pointer;" data-toggle="modal" data-target="#modalCliente">search</i>
+                  </div>
+                </div>
+              </div>
+          </div> 
+              <div class="row">   
+                <div class="col-md-6 mr-auto">                                                         
+                  <label for="catego" >Categoria</label>
+                  <select id="catego" name ="catego" [(ngModel)]=categoriacarga class="form-control" *ngIf="categorias" (change)= tipoProd() [disabled]=putObservacion>
+                    <option selected="true" value="">Todos</option>
+                    <option *ngFor="let row of categorias.lista" value={{row.idCategoria}}>{{row.descripcion}}</option>
+                  </select>                      
+                </div> 
+                <div class="col-md-6 mr-auto">
+                  <label for="tipoProducto">Subcategoria</label>         
+                  <select id="tipoProducto" name ="tipoProducto" [(ngModel)]=tipoProducto class="form-control" *ngIf="tipoProductos" [disabled]=putObservacion>
+                  <option *ngFor="let row of tipoProductos.lista" value={{row.idTipoProducto}}>{{row.descripcion}}</option>
+                  </select>
+                </div>    
+              </div>
+              <div class="row">  
+                <div class="col-md-6 mr-auto">
+                  <label for="motivo">Motivo</label>                             
+                  <textarea class="form-control" rows="2" id="motivo" name ="motivo" [(ngModel)]="motivo" [disabled]=putObservacion ></textarea>
+                </div>
+                <div class="col-md-6 mr-auto">
+                  <label for="diagnostico">Diagnóstico</label>                  
+                  <textarea class="form-control" rows="2" id="diagnostico" name ="diagnostico" [(ngModel)]="diagnostico" [disabled]=putObservacion ></textarea>
+                </div>
+              </div>                  
+              <mat-form-field>
+                  <input matInput [(ngModel)]="observacion" type="text" placeholder="Ingrese la Observación">
+              </mat-form-field>                                                  
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" (click)="sumar()" data-dismiss="modal">Guardar</button>
+          </div>
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Servicios creados a partir de esta ficha</h5>              
+          </div>
+          <div class="table-responsive">
+              <table class="table">
+                      <thead>
+                          <tr>
+                            <th>Fecha</th>
+                            <th>Presupuesto</th>    
+                            <th class="text-right">Acciones</th>                                
+                          </tr>
+                      </thead>
+                    <tbody  *ngIf="servicios">
+                        <tr *ngFor="let row of servicios.lista">
+                            <td>{{row.fechaHora}}</td>
+                            <td>{{row.presupuesto}}</td>
+                            <td class="td-actions text-right">
+                              <button mat-raised-button type="button" data-toggle="modal" (click)=cargarfilaFicha(row) data-target="#servicioModal" data-dismiss="modal" class="btn btn-success {{row[5]}}">
+                                  <i class="material-icons">remove_red_eye</i>
+                                  Ver/Editar Servicio
+                              </button>
+                          </td>
+                        </tr>
+                    </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>      
+<!---------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------Mensaje Advertencia Eliminar------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------->
+    <div class="modal fade" id="eliminar" tabindex="-1" role="dialog" aria-labelledby="eliminarLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="eliminarLabel">Advertencia</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">   
+            <p>¿Seguro que Desea eliminar esta Ficha Clinica?</p>                                         
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" (click)="borrar()" data-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>             
+<!---------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------Seleccionar Empleado Modal------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------->
+<div class="modal fade" id="modalEmpleado" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Seleccionar empleado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; align-items: baseline;justify-content: space-between;">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="filtroEmpleado" value="cedula" checked> Cédula
+                            <span class="circle">
+                                <span class="check"></span>
+                            </span>
+                        </label>
                     </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="filtroEmpleado" value="nombre"> Nombre
+                        <span class="circle">
+                            <span class="check"></span>
+                        </span>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="filtroEmpleado" value="apellido"> Apellido
+                        <span class="circle">
+                            <span class="check"></span>
+                        </span>
+                        </label>
+                    </div>                                                    
+                </div>
+                <div style="display: flex; align-items: center;justify-content: space-between;">
+                    <mat-form-field class="example-full-width">
+                        <input id="buscarClienteText" #buscarEmpleadoText matInput placeholder="Buscar...">
+                    </mat-form-field>
+                    <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListEmpleadosFiltrado(buscarEmpleadoText)">search</i>
+                </div>
+                <br />
+                <div style="display: flex; align-items: center;justify-content: space-between;">                      
+                        <select  placeholder="Seleccione el fisioterapeuta" [(ngModel)]=empleadopro (selectionChange)="selectChangeHandlerEmpleado($event.value)" class="form-control" *ngIf="empleados">                            
+                          <option *ngFor="let empleado of empleados.lista" value="{{empleado.idPersona}}|{{ empleado.nombre }} {{ empleado.apellido }}" value=empleado>
+                              {{ empleado.nombre }} {{ empleado.apellido }} - CI: {{ empleado.cedula }}
+                          </option>
+                        </select>    
+                    <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListEmpleados(buscarEmpleadoText)">close</i>
                 </div>
             </div>
-            <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header card-header-rose card-header-icon">
-                    <div class="card-icon">
-                      <i class="material-icons">assignment</i>
-                    </div>
-                    <h4 class="card-title">Shopping Cart Table</h4>
-                  </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-shopping">
-                                    <thead>
-                                        <tr>
-                                          <th class="text-center">{{ tableData3.headerRow[0] }}</th>
-                                          <th>{{ tableData3.headerRow[1] }}</th>
-                                          <th class="th-description">{{ tableData3.headerRow[2] }}</th>
-                                          <th class="th-description">{{ tableData3.headerRow[3] }}</th>
-                                          <th class="text-right">{{ tableData3.headerRow[4] }}</th>
-                                          <th class="text-right">{{ tableData3.headerRow[5] }}</th>
-                                          <th class="text-right">{{ tableData3.headerRow[6] }}</th>
-                                          <th></th>
-                                        </tr>
-                                    </thead>
-                                  <tbody>
-                                      <tr *ngFor="let row of tableData3.dataRows">
-                                          <td>
-                                              <div class="img-container">
-                                                  <img src="./assets/img/{{row[0]}}.jpg" alt="...">
-                                              </div>
-                                          </td>
-                                          <td class="td-name">
-                                              <a href="{{row[1]}}">{{row[2]}}</a>
-                                              <br />
-                                              <small>{{row[3]}}</small>
-                                          </td>
-                                          <td>{{row[4]}}</td>
-                                          <td>
-                                              {{row[5]}}
-                                          </td>
-                                          <td class="td-number text-right"><small>&euro;</small> {{row[6]}}</td>
-                                          <td class="td-number">
-                                              {{row[7]}}
-                                              <div class="btn-group btn-group-sm">
-                                                  <button mat-raised-button class="btn btn-round btn-info btn-xs"> <i class="material-icons">remove</i> </button>
-                                                  <button mat-raised-button class="btn btn-round btn-info btn-xs"> <i class="material-icons">add</i> </button>
-                                              </div>
-                                          </td>
-                                          <td class="td-number">
-                                              <small>&euro;</small>{{row[8]}}
-                                          </td>
-                                          <td class="td-actions">
-                                              <button mat-button type="button"  matTooltip="Remove item" [matTooltipPosition]="'left'" class="btn btn-link">
-                                                  <i class="material-icons">close</i>
-                                              </button>
-                                          </td>
-                                      </tr>
-                                      <tr>
-                                          <td colspan="5"></td>
-                                          <td class="td-total">
-                                              Total
-                                          </td>
-                                          <td colspan="1" class="td-price">
-                                              <small>&euro;</small>{{getTotal()}}
-                                          </td>
-                                          <td></td>
-                                      </tr>
-                                      <tr>
-                                          <td colspan="6"></td>
-                                          <td colspan="2" class="text-right">
-                                              <button mat-raised-button type="button" class="btn btn-info btn-round">Complete Purchase <i class="material-icons">keyboard_arrow_right</i></button>
-                                          </td>
-                                      </tr>
-                                  </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" (click)="seleccionarEmpleado()" data-dismiss="modal">Seleccionar</button>
             </div>
         </div>
-    </div>
+    </div> 
+</div>
+
+
+<!---------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------Seleccionar Cliente Modal------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------->
+
+
+<div class="modal fade" id="modalCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Seleccionar cliente</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <div style="display: flex; align-items: baseline;justify-content: space-between;">
+                  <div class="form-check">
+                      <label class="form-check-label">
+                          <input class="form-check-input" type="radio" name="filtroCliente" value="cedula" checked> Cédula
+                          <span class="circle">
+                              <span class="check"></span>
+                          </span>
+                      </label>
+                  </div>
+                  <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="filtroCliente" value="nombre"> Nombre
+                            <span class="circle">
+                              <span class="check"></span>
+                            </span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="radio" name="filtroCliente" value="apellido"> Apellido
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>                                                    
+              </div>
+              <div style="display: flex; align-items: center;justify-content: space-between;">
+                  <mat-form-field class="example-full-width">
+                      <input id="buscarClienteText" #buscarClienteText matInput placeholder="Buscar...">
+                  </mat-form-field>
+                  <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListClientesFiltrado(buscarClienteText)">search</i>
+              </div>
+              <br />
+              <div style="display: flex; align-items: center;justify-content: space-between;">                      
+                  <select  placeholder="Seleccione el fisioterapeuta" [(ngModel)]=clientepro (selectionChange)="selectChangeHandler($event.value2)" class="form-control" *ngIf="clientes">                            
+                    <option *ngFor="let cliente of clientes.lista" value="{{cliente.idPersona}}|{{ cliente.nombre }} {{ cliente.apellido }}" value2=cliente>
+                        {{ cliente.nombre }} {{ cliente.apellido }} - CI: {{ cliente.cedula }}
+                    </option>
+                  </select>    
+              <i class="material-icons" style="font-size: 20px; line-height: 2; color: gray;cursor: pointer; padding-left: 15px;" (click)="getListEmpleados(buscarEmpleadoText)">close</i>
+          </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary" (click)="seleccionarCliente()" data-dismiss="modal">Seleccionar</button>
+          </div>
+      </div>
+  </div>
+</div>
+
 </div>

@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExportAsModule } from 'ngx-export-as';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 import {
   MatAutocompleteModule,
@@ -90,7 +91,8 @@ import { PresentacionProductoComponent } from './presentacion-producto/presentac
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    ExportAsModule
+    ExportAsModule,
+    NgxPaginationModule
   ],
   //declarations: [PresentacionProductoComponent, PacientesComponent]
 })

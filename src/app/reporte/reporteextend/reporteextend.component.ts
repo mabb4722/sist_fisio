@@ -49,28 +49,37 @@ export class ReporteextendComponent implements OnInit {
     precio=0;   
     // detalle={idDetalle:'',presentacion:'',precioUnitario:0,cantidad:0,total:0};    
     detalleArray= new Array();
-    response:any;
+    response:any;    
     detalle={fechaHora:'', fisioterapeuta:'',paciente:'',precioUnitario:0,cantidad:0,total:0,nombreProducto:''}; 
+    agregarFichaEmpCl=false;
+    nombreEmpleado="";  
+    nombreCliente="";
+    empleados:any;
+    clientes : any;
+    empleadoSelect: any;
+    clienteSelect: any;
+    empleadopro="";
+    clientepro="";
     ngOnInit() {    
         this.getLisServicio();  
-        // this.dataApi.getAllempleados().subscribe((fisioterapeutas:any)=>{
-        //     this.fisioterapeutas= fisioterapeutas;
-        // }); 
-        // this.dataApi.getAllpacientes().subscribe((pacientes:any)=>{
-        //     this.pacientes= pacientes;
-        // });
-        this.dataApi.getCategorias().subscribe((categoria:any)=>{
-            this.categorias=categoria;             
+        this.dataApi.getAllempleados().subscribe((fisioterapeutas:any)=>{
+          this.fisioterapeutas= fisioterapeutas;
         }); 
+        this.dataApi.getAllpacientes().subscribe((pacientes:any)=>{
+          this.pacientes= pacientes;
+        });
+        this.dataApi.getCategorias().subscribe((categoria:any)=>{
+          this.categorias=categoria;             
+        }); 
+        this.getListClientes(null);
+        this.getListEmpleados(null);
     };
-    // tipoProd(){
-    //     this.dataApi.getProductos(this.categoriafiltro).subscribe((productos:any)=>{
-    //         this.productos=productos;
-    //         console.log(this.productos);
-    //     })
-    //     this.dataApi.getAllfichaClinicas("","","","","").subscribe((fichaClinica: fichaClinicaInterface) => {
-    //         this.fichaClinica = fichaClinica;        } );
-    // }
+    tipoProd(){
+      this.dataApi.getProductos(this.categoriafiltro).subscribe((productos:any)=>{
+        this.productos=productos;
+        console.log(this.productos);
+      })     
+    }
    
     
     getLisServicio() {
@@ -123,7 +132,13 @@ export class ReporteextendComponent implements OnInit {
         this.desde =a[0]+a[1]+a[2];
         var a =this.hastafiltro.split("-");
         this.hasta=a[0]+a[1]+a[2];
-        this.getLisServicio();   
+        this.dataApi.getserviciosFiltro(this.desde,this.hasta,this.pacientefiltro,this.fisioterapeutafiltro,this.productofiltro).subscribe((servicios: any) => {
+          this.servicios = servicios.lista;  
+          this.detalleArray.length = 0;       
+          for (let servicio of this.servicios) {
+            this.getdetalleServicio(servicio);           
+          }         
+      } ); 
     }
     limpiar(){
         this.desdefiltro="2019-01-01";
@@ -132,6 +147,8 @@ export class ReporteextendComponent implements OnInit {
         this.fisioterapeutafiltro="";
         this.categoriafiltro="";
         this.productofiltro ="";
+        this.nombreCliente= ""; 
+        this.nombreEmpleado = "";   
         this.precio=0;
     }    
     radiobu(event: any){  
@@ -180,17 +197,63 @@ export class ReporteextendComponent implements OnInit {
         )
       });
     }
-      
-     
-    
 
-    
     precioPresentacion(){
         this.dataApi.getpresentacionprecio(this.presentacion).subscribe(data=>{
             var pre:any=data;
             this.precio=pre.lista[0].precioVenta;
         })
     }
+    
+  getListEmpleadosFiltrado(buscarEmpleadoText){
+    var filtro=$('input:radio[name=filtroEmpleado]:checked').val();
+    this.dataApi.getEmpleadosFiltradoRep(filtro, buscarEmpleadoText.value).subscribe(empleados => {
+      this.empleados = empleados;
+      console.log("empleados", empleados);
+      console.log("this.empleados", this.empleados);
+  } );    
+    console.log("filtro", filtro);
+    console.log("buscarClienteText", buscarEmpleadoText.value);
+  }
+  getListClientesFiltrado(buscarClienteText){
+    var filtro=$('input:radio[name=filtroCliente]:checked').val();
+    this.dataApi.getClientesFiltradoRep(filtro, buscarClienteText.value).subscribe(clientes => {
+      this.clientes = clientes;
+      console.log("clientes", clientes);
+      console.log("this.clientes", this.clientes);
+  } );
+    
+    console.log("filtro", filtro);
+    console.log("buscarClienteText", buscarClienteText.value);
+  }
+  getListClientes(buscarClienteText) {
+    this.dataApi.getAllpersonas().subscribe(clientes => {
+        this.clientes = clientes;    
+    } );
+  }
+  selectChangeHandlerEmpleado(empleado: any){
+    //this.clienteSelect = event.target.value;    
+    this.empleadoSelect = empleado;
+  }
+  selectChangeHandler(cliente: any){
+    //this.clienteSelect = event.target.value;
+    this.clienteSelect = cliente;
+  }
+  getListEmpleados(buscarEmpleadoText) {
+    this.dataApi.getAllpersonas().subscribe(empleados => {
+        this.empleados = empleados;
+    } );
+  }
+seleccionarEmpleado(){  
+  var aux = this.empleadopro.split('|');      
+  this.nombreEmpleado = aux[1];   
+  this.fisioterapeutafiltro=aux[0];    
+}
+seleccionarCliente(){
+  var aux = this.clientepro.split('|');
+  this.nombreCliente= aux[1]; 
+  this.pacientefiltro=aux[0];                 
+}
 
 
 }

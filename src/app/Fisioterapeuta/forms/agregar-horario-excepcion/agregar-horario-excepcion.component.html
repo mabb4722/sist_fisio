@@ -1,0 +1,105 @@
+<form [formGroup]="formAtencionForm" (ngSubmit)="uploadComplete()">
+
+
+  <div class="form-group row" >
+          <label class="col-sm-3 col-form-label">Empleado</label>
+          <div class="col-sm-7">
+            <input value="{{valorpersona}}" type="text" name="Empleado" class="form-control" disabled>
+            <a href="#"  (click)="cargarpersonas()" data-toggle="modal" data-target="#upload-avatar" class="button"><i class="fa fa-plus"></i> Buscar Empleado</a>
+          </div>
+      </div>
+      
+      
+      
+      
+      <!--Modal for uploading photo-->
+      <div class="modal" id="upload-avatar" tabindex="-1" role="dialog" aria-labelledby="upload-avatar-title" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="upload-avatar-title">Buscar Empleado</h4>
+              </div>
+              <div class="modal-body center">
+                    <div class="col-sm-7">
+                        <div class="active-cyan-4 mb-4">
+                            <label class="col-sm-6 col-form-label">Nombre</label>
+                            <input class="form-control" type="text" (input)="onSearchChange('nombre',$event.target.value)">
+                            <label class="col-sm-6 col-form-label">Apellido</label>
+                            <input class="form-control" type="text" (input)="onSearchChange('apellido',$event.target.value)">
+                        </div>
+                    </div>
+                    <div class="form-group row"  >
+                          <label class="col-sm-3 col-form-label">Empleado</label>
+                          <div class="col-sm-7" formGroupName="idEmpleado" >
+                              <select formControlName="idPersona" class="form-control">
+                                  <option *ngFor="let emp of personas" [value]="emp.value">
+                                    {{emp.key}} </option>  
+                              </select>
+                          </div>
+                      </div>
+               
+                <button type="button"   (click)="closemodalFisio($event)"class="btn btn-secondary" id="btnUploadCancel">Cancel</button>
+                <button type="button"  (click)="handleClick($event)" class="btn btn-primary">Seleccionar</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+      </div>
+      
+
+
+
+
+<div class="form-group row" >
+<label class="col-sm-3 col-form-label">EsHabilitar</label>
+<div class="col-sm-7" >
+    <select formControlName="flagEsHabilitar" class="form-control" >
+        <option *ngFor="let hab of habilitar" [value]="hab.value">
+          {{hab.key}} </option>  
+    </select>
+</div>
+</div>
+
+<div class="form-group row">
+  <label class="col-sm-3 col-form-label">Fecha Cadena</label>
+  <div class="col-sm-5"  >
+      <input type="date" name="bday" formControlName="fechaCadena" class="form-control">
+  </div>
+</div>
+
+
+
+<div class="form-group row">
+<label class="col-sm-3 col-form-label">Hora Apertura</label>
+<div class="col-sm-4"  >
+    <input type="time" name="bday" formControlName="horaAperturaCadena" class="form-control">
+</div>
+</div>
+
+<div class="form-group row">
+<label class="col-sm-3 col-form-label">Hora de Cierra</label>
+<div class="col-sm-4"  >
+    <input type="time" name="bday" formControlName="horaCierreCadena" class="form-control">
+</div>
+</div>
+
+
+<div class="form-group row">
+<label class="col-sm-3 col-form-label">Intervalo Minutos</label>
+<div class="col-sm-4"  >
+ <select formControlName="intervaloMinutos" class="form-control">
+    <option *ngFor="let li of limit" [value]="li ">{{li}} </option>  
+  </select>
+</div>
+</div>
+
+
+<div class="modal-footer">
+<button type="close" (click)="revert()" [disabled]="formAtencionForm.pristine"
+class="btn btn-secondary">Clear</button>
+<button type="submit" 
+  [disabled]="!formAtencionForm.valid  || (formAtencionForm.controls['flagEsHabilitar'].value=='S' && formAtencionForm.controls['horaAperturaCadena'].value>=formAtencionForm.controls['horaCierreCadena'].value)"
+  class="btn btn-primary" >Agregar
+</button>
+</div>
+</form>
